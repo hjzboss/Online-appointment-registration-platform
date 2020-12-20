@@ -25,5 +25,8 @@ public interface OrderService extends IService<OrderInfo> {
 
     //订单详情
     Map<String,Object> show(Long orderId);
+
+    //就诊通知
+    void patientTips();
 }
 

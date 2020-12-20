@@ -218,10 +218,14 @@ export default {
       }
 
       this.submitBnt = '正在提交...'
+      alert('shit')
       orderInfoApi.submitOrder(this.scheduleId, this.patient.id).then(response => {
         let orderId = response.data
+        console.log(orderId)
+        alert('fuck')
         window.location.href = '/order/show?orderId=' + orderId
       }).catch(e => {
+        alert('fuck1')
         this.submitBnt = '确认挂号'
       })
     },

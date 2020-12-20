@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -115,6 +116,7 @@ public class OrderServiceImpl extends
         paramMap.put("timestamp", HttpRequestHelper.getTimestamp());
         String sign = HttpRequestHelper.getSign(paramMap, signInfoVo.getSignKey());
         paramMap.put("sign", sign);
+        //todo: 此处访问接口出现问题
         JSONObject result = HttpRequestHelper.sendRequest(paramMap, signInfoVo.getApiUrl() + "/order/submitOrder");
         //预约成功后要更新预约数和短信提醒预约成功
         if (result.getInteger("code") == 200) {
@@ -225,6 +227,28 @@ public class OrderServiceImpl extends
                 = patientFeignClient.getPatientOrder(orderInfo.getPatientId());
         map.put("patient", patient);
         return map;
+    }
+
+    //就诊通知
+    @Override
+    public void patientTips() {
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("reserve_date", new DateTime().toString("yyyy-MM-dd"));
+        wrapper.ne("order_status", OrderStatusEnum.CANCLE.getStatus());
+        List<OrderInfo> orderInfoList = baseMapper.selectList(wrapper);
+        for (OrderInfo orderInfo : orderInfoList) {
+            //短信提示
+            MsmVo msmVo = new MsmVo();
+            msmVo.setPhone(orderInfo.getPatientPhone());
+            String reserveDate = new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd") + (orderInfo.getReserveTime() == 0 ? "上午" : "下午");
+            Map<String, Object> param = new HashMap<String, Object>() {{
+                put("title", orderInfo.getHosname() + "|" + orderInfo.getDepname() + "|" + orderInfo.getTitle());
+                put("reserveDate", reserveDate);
+                put("name", orderInfo.getPatientName());
+            }};
+            msmVo.setParam(param);
+            rabbitService.sendMessage(MqConst.EXCHANGE_DIRECT_MSM, MqConst.ROUTING_MSM_ITEM, msmVo);
+        }
     }
 
 
