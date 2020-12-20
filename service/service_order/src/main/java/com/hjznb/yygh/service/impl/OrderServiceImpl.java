@@ -122,6 +122,7 @@ public class OrderServiceImpl extends
         if (result.getInteger("code") == 200) {
             JSONObject jsonObject = result.getJSONObject("data");
             //预约记录唯一标识（医院预约记录主键）
+            
             String hosRecordId = jsonObject.getString("hosRecordId");
             //预约序号
             Integer number = jsonObject.getInteger("number");
