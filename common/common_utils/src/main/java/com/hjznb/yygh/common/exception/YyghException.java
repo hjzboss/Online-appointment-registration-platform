@@ -4,12 +4,12 @@ import com.hjznb.yygh.common.result.ResultCodeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 自定义全局异常类
- *
- * @author qy
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "自定义全局异常类")
 public class YyghException extends RuntimeException {
