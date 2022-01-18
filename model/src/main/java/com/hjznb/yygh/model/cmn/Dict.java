@@ -14,8 +14,6 @@ import java.util.Map;
  * <p>
  * Dict
  * </p>
- *
- * @author qy
  */
 @Data
 @ApiModel(description = "数据字典")
@@ -43,7 +41,7 @@ public class Dict {
 
     @ApiModelProperty(value = "其他参数")
     @TableField(exist = false)
-    private Map<String,Object> param = new HashMap<>();
+    private Map<String, Object> param = new HashMap<>();
 
     @ApiModelProperty(value = "上级id")
     @TableField("parent_id")
@@ -61,8 +59,9 @@ public class Dict {
     @TableField("dict_code")
     private String dictCode;
 
+    // 为了element ui所需添加的属性，显示子标签
     @ApiModelProperty(value = "是否包含子节点")
-    @TableField(exist = false)
+    @TableField(exist = false) // 数据库中的表并不包含此字段
     private boolean hasChildren;
 
 }

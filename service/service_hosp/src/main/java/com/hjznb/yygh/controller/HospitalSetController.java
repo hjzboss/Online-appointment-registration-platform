@@ -23,6 +23,7 @@ import java.util.Random;
 @Api(tags = "医院设置管理") //swagger文档中加入注解
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
+@CrossOrigin
 public class HospitalSetController {
     private final HospitalSetService hospitalSetService;
 
@@ -53,7 +54,7 @@ public class HospitalSetController {
 
     //3 条件查询带分页
     @ApiOperation(value = "条件查询带分页")
-    @GetMapping("findPage/{current}/{limit}")
+    @PostMapping("findPage/{current}/{limit}")
     public Result findPageHospSet(@PathVariable long current,
                                   @PathVariable long limit,
                                   @RequestBody(required = false) HospitalSetQueryVo hospitalSetQueryVo) {//不一定要有这个参数，前端要传json数据，而不是具体的参数
@@ -125,7 +126,7 @@ public class HospitalSetController {
 
     //8 医院设置锁定和解锁
     @ApiOperation(value = "医院设置锁定和解锁")
-    @GetMapping("lockHospitalSet/{id}/{status}")
+    @PutMapping ("lockHospitalSet/{id}/{status}")
     public Result lockHospitalSet(@PathVariable Long id,
                                   @PathVariable Integer status) {
         //根据id查询医院设置信息
