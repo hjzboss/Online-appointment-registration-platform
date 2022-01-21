@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * MybatisPlus配置类
- *
- * @author qy
  */
 @EnableTransactionManagement //事务处理
 @Configuration
@@ -29,8 +27,6 @@ public class MybatisPlusConfig {
 
     /**
      * 乐观锁配置
-     *
-     * @return
      */
     @Bean
     public OptimisticLockerInterceptor optimisticLockerInterceptor() {
