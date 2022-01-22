@@ -11,6 +11,12 @@
 
     <artifactId>service_hosp</artifactId>
     <version>1.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+        </dependency>
+    </dependencies>
     <packaging>jar</packaging>
     <name>service-hosp</name>
     <description>service-hosp</description>

@@ -24,10 +24,6 @@ public class HttpRequestHelper {
         log.info(getSign(paramMap, "111111111"));
     }
 
-    /**
-     * @param paramMap
-     * @return
-     */
     public static Map<String, Object> switchMap(Map<String, String[]> paramMap) {
         Map<String, Object> resultMap = new HashMap<>();
         for (Map.Entry<String, String[]> param : paramMap.entrySet()) {
@@ -38,10 +34,6 @@ public class HttpRequestHelper {
 
     /**
      * 请求数据获取签名
-     *
-     * @param paramMap
-     * @param signKey
-     * @return
      */
     public static String getSign(Map<String, Object> paramMap, String signKey) {
         paramMap.remove("sign");
@@ -59,10 +51,6 @@ public class HttpRequestHelper {
 
     /**
      * 签名校验
-     *
-     * @param paramMap
-     * @param signKey
-     * @return
      */
     public static boolean isSignEquals(Map<String, Object> paramMap, String signKey) {
         String sign = (String) paramMap.get("sign");
@@ -72,8 +60,6 @@ public class HttpRequestHelper {
 
     /**
      * 获取时间戳
-     *
-     * @return
      */
     public static long getTimestamp() {
         return new Date().getTime();
@@ -81,10 +67,6 @@ public class HttpRequestHelper {
 
     /**
      * 封装同步请求
-     *
-     * @param paramMap
-     * @param url
-     * @return
      */
     public static JSONObject sendRequest(Map<String, Object> paramMap, String url) {
         String result = "";
