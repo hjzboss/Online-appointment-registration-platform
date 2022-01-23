@@ -38,15 +38,15 @@ public class ApiController {
         Map<String, String[]> requestMap = request.getParameterMap();
         Map<String, Object> map = HttpRequestHelper.switchMap(requestMap);
         //1.获取医院系统传递过来的签名,签名进行了MD5加密
-        //todo: bug,sign签名和发送的不一致
         String hospSign = (String) map.get("sign");
         //2.根据传递过来的医院编码，查询数据库，查询签名
         String hoscode = (String) map.get("hoscode");
         String signKey = hospitalSetService.getSignKey(hoscode);
         //3.把数据库查询签名进行MD5加密
         String encrypt = MD5.encrypt(signKey);
+        boolean equals = encrypt.equals(hospSign);
         //4.判断签名是否一致
-        if (!hospSign.equals(signKey)) {
+        if (!hospSign.equals(encrypt)) {
             throw new YyghException(ResultCodeEnum.SIGN_ERROR);
         }
         //调用service方法

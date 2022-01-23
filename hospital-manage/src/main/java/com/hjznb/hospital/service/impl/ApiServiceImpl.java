@@ -124,7 +124,8 @@ public class ApiServiceImpl implements ApiService {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("hoscode", this.getHoscode());
         paramMap.put("timestamp", HttpRequestHelper.getTimestamp());
-        paramMap.put("sign", HttpRequestHelper.getSign(paramMap, this.getSignKey()));
+        //paramMap.put("sign", HttpRequestHelper.getSign(paramMap, this.getSignKey()));
+        paramMap.put("sign", MD5.encrypt(this.getSignKey()));
         JSONObject respone = HttpRequestHelper.sendRequest(paramMap, this.getApiUrl() + "/api/hosp/hospital/show");
         System.out.println(respone.toJSONString());
         if (null != respone && 200 == respone.getIntValue("code")) {
@@ -155,11 +156,9 @@ public class ApiServiceImpl implements ApiService {
         paramMap.put("bookingRule", bookingRule.toJSONString());
 
         paramMap.put("timestamp", HttpRequestHelper.getTimestamp());
-        // todo: bug
-        paramMap.put("sign", HttpRequestHelper.getSign(paramMap, this.getSignKey()));
-
+        //paramMap.put("sign", HttpRequestHelper.getSign(paramMap, this.getSignKey()));
+        paramMap.put("sign", MD5.encrypt(this.getSignKey()));
         JSONObject respone = HttpRequestHelper.sendRequest(paramMap, this.getApiUrl() + "/api/hosp/saveHospital");
-        System.out.println(respone.toJSONString());
 
         if (null != respone && 200 == respone.getIntValue("code")) {
             return true;

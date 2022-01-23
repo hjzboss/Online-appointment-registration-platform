@@ -32,6 +32,7 @@ public class HospitalServiceImpl implements HospitalService {
         String hoscode = hospital.getHoscode();
         Hospital hospitalExist = hospitalRepository.getHospitalByHoscode(hoscode);
         //如果存在，进行修改
+        //todo:存在无法更新，存在重复id不能插入
         if(hospitalExist != null) {
             hospital.setStatus(hospitalExist.getStatus());
             hospital.setCreateTime(hospitalExist.getCreateTime());
