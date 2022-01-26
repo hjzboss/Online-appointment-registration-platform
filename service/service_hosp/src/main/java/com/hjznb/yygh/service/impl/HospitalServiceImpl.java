@@ -32,12 +32,14 @@ public class HospitalServiceImpl implements HospitalService {
         String hoscode = hospital.getHoscode();
         Hospital hospitalExist = hospitalRepository.getHospitalByHoscode(hoscode);
         //如果存在，进行修改
-        //todo:存在无法更新，存在重复id不能插入
-        if(hospitalExist != null) {
+        if (hospitalExist != null) {
+            hospital.setId(hospitalExist.getId());
             hospital.setStatus(hospitalExist.getStatus());
             hospital.setCreateTime(hospitalExist.getCreateTime());
             hospital.setUpdateTime(new Date());
             hospital.setIsDeleted(0);
+            //mongodb不允许重复id，需要先删除再添加
+            hospitalRepository.delete(hospitalExist);
             hospitalRepository.save(hospital);
         } else {
             //如果不存在，进行添加
@@ -48,5 +50,11 @@ public class HospitalServiceImpl implements HospitalService {
             hospitalRepository.save(hospital);
         }
 
+    }
+
+    @Override
+    public Hospital getByHoscode(String hoscode) {
+        Hospital hospital = hospitalRepository.getHospitalByHoscode(hoscode);
+        return hospital;
     }
 }

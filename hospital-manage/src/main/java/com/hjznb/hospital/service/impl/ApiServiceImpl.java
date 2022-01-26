@@ -124,7 +124,6 @@ public class ApiServiceImpl implements ApiService {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("hoscode", this.getHoscode());
         paramMap.put("timestamp", HttpRequestHelper.getTimestamp());
-        //paramMap.put("sign", HttpRequestHelper.getSign(paramMap, this.getSignKey()));
         paramMap.put("sign", MD5.encrypt(this.getSignKey()));
         JSONObject respone = HttpRequestHelper.sendRequest(paramMap, this.getApiUrl() + "/api/hosp/hospital/show");
         System.out.println(respone.toJSONString());
