@@ -47,4 +47,18 @@ public class DictController {
         List<Dict> list = dictService.findChildData(id);
         return Result.ok(list);
     }
+
+    //根据dictcode和value查询
+    @GetMapping("getName/{dictCode}/{value}")
+    public String getName(@PathVariable String dictCode, @PathVariable String value) {
+        String dictName = dictService.getDictName(dictCode, value);
+        return dictName;
+    }
+
+    //根据value查询
+    @GetMapping("getName/{value}")
+    public String getName(@PathVariable String value) {
+        String dictName = dictService.getDictName("", value);
+        return dictName;
+    }
 }

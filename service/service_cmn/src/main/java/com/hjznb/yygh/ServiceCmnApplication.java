@@ -2,6 +2,7 @@ package com.hjznb.yygh;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @version 1.0
  * @date 2022/1/15 16:34
  */
+@EnableDiscoveryClient
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.hjznb"}) // 该注解默认会扫描该类所在的包下所有的配置类
 public class ServiceCmnApplication {

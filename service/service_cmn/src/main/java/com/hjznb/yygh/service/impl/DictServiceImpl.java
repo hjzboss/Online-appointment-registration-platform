@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,10 +30,9 @@ import java.util.List;
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
 
 
-
     //根据数据id查询子数据列表
     @Override
-    @Cacheable(value = "dict",keyGenerator = "keyGenerator")
+    @Cacheable(value = "dict", keyGenerator = "keyGenerator")
     public List<Dict> findChildData(Long id) {
         QueryWrapper<Dict> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", id);
@@ -94,5 +94,37 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getDictName(String dictCode, String value) {
+        if (StringUtils.isEmpty(dictCode)) {
+            //如果dictCode为空，则为数据，直接根据value查询
+            QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
+            dictQueryWrapper.eq("value", value);
+            Dict dict = baseMapper.selectOne(dictQueryWrapper);
+            return dict.getName();
+        } else {
+            //如果dictCode不为空，则为分类，根据dictCode和value查询
+            Dict dict = this.getDictByDictCode(dictCode);
+            //得到dict对象的id值，dict对象为具体分类，如医院等级，证件类型等等
+            Long id = dict.getId();
+            //根据parent_id和value进行查询
+
+            //上面dict对象的id值为其对应分类下的数据的parent_id值
+            //故需要用parent_id和value进行分类中的具体数据查询
+            Dict findDict = baseMapper.selectOne(new QueryWrapper<Dict>()
+                    .eq("parent_id", id)
+                    .eq("value", value));
+            return findDict.getName();
+        }
+    }
+
+    //根据dictCode查询dict对象
+    private Dict getDictByDictCode(String dictCode) {
+        QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
+        dictQueryWrapper.eq("dict_code", dictCode);
+        Dict dict = baseMapper.selectOne(dictQueryWrapper);
+        return dict;
     }
 }
