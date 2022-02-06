@@ -1,6 +1,7 @@
 package com.hjznb.yygh.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hjznb.yygh.cmn.client.DictFeignClient;
 import com.hjznb.yygh.model.hosp.Hospital;
 import com.hjznb.yygh.repository.HospitalRepository;
 import com.hjznb.yygh.service.HospitalService;
@@ -21,9 +22,11 @@ import java.util.Map;
 @Service
 public class HospitalServiceImpl implements HospitalService {
     private final HospitalRepository hospitalRepository;
+    private final DictFeignClient dictFeignClient;
 
-    public HospitalServiceImpl(HospitalRepository hospitalRepository) {
+    public HospitalServiceImpl(HospitalRepository hospitalRepository, DictFeignClient dictFeignClient) {
         this.hospitalRepository = hospitalRepository;
+        this.dictFeignClient = dictFeignClient;
     }
 
     @Override
@@ -69,7 +72,22 @@ public class HospitalServiceImpl implements HospitalService {
         Hospital hospital = new Hospital();
         BeanUtils.copyProperties(hospitalQueryVo, hospital);
         Example<Hospital> example = Example.of(hospital, matcher);
-        Page<Hospital> all = hospitalRepository.findAll(example, of);
-        return all;
+        Page<Hospital> pages = hospitalRepository.findAll(example, of);
+        //获取查询list集合，为hospital对象，遍历进行医院等级封装
+        pages.getContent().forEach(this::setHospitalHosType);
+        return pages;
+    }
+
+    //给hospital对象封装属性
+    private void setHospitalHosType(Hospital item) {
+        //调用cmn模块查询等级属性的名字
+        String hostype = dictFeignClient.getName("Hostype", item.getHostype());
+        //查询省 市 地区
+        String provinceString = dictFeignClient.getName(item.getProvinceCode());
+        String cityString = dictFeignClient.getName(item.getCityCode());
+        String districtString = dictFeignClient.getName(item.getDistrictCode());
+
+        item.getParam().put("fullAddress", provinceString + cityString + districtString);
+        item.getParam().put("hostypeString", hostype);
     }
 }

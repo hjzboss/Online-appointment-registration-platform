@@ -3,28 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>service</artifactId>
+        <artifactId>service-client</artifactId>
         <groupId>com.hjznb.yygh</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service_hosp</artifactId>
-    <version>1.0</version>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.hjznb.yygh</groupId>
-            <artifactId>service-cmn-client</artifactId>
-            <version>1.0</version>
-        </dependency>
-    </dependencies>
+    <artifactId>service-cmn-client</artifactId>
     <packaging>jar</packaging>
-    <name>service-hosp</name>
-    <description>service-hosp</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
