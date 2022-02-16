@@ -2,6 +2,8 @@ package com.hjznb.yygh.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hjznb.yygh.cmn.client.DictFeignClient;
+import com.hjznb.yygh.common.exception.YyghException;
+import com.hjznb.yygh.common.result.ResultCodeEnum;
 import com.hjznb.yygh.model.hosp.Hospital;
 import com.hjznb.yygh.repository.HospitalRepository;
 import com.hjznb.yygh.service.HospitalService;
@@ -12,7 +14,9 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author hjz
@@ -60,8 +64,7 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Override
     public Hospital getByHoscode(String hoscode) {
-        Hospital hospital = hospitalRepository.getHospitalByHoscode(hoscode);
-        return hospital;
+        return hospitalRepository.getHospitalByHoscode(hoscode);
     }
 
     //条件查询带分页
@@ -76,6 +79,38 @@ public class HospitalServiceImpl implements HospitalService {
         //获取查询list集合，为hospital对象，遍历进行医院等级封装
         pages.getContent().forEach(this::setHospitalHosType);
         return pages;
+    }
+
+    @Override
+    public void updateStatus(String id, Integer status) {
+        Optional<Hospital> byId = hospitalRepository.findById(id);
+        if(byId.isPresent()) {
+            //更新status
+            Hospital hospital = byId.get();
+            hospitalRepository.delete(hospital);
+            hospital.setStatus(status);
+            hospital.setUpdateTime(new Date());
+            hospitalRepository.save(hospital);
+        } else {
+            throw new YyghException(ResultCodeEnum.DATA_ERROR);
+        }
+    }
+
+    @Override
+    public Map<String, Object> getHospById(String id) {
+        Map<String, Object> result = new HashMap<>();
+        Optional<Hospital> byId = hospitalRepository.findById(id);
+        if(byId.isPresent()) {
+            Hospital hospital = byId.get();
+            // 添加额外信息
+            this.setHospitalHosType(hospital);
+            result.put("hospital",hospital);
+            result.put("bookingRule", hospital.getBookingRule());
+            hospital.setBookingRule(null);
+            return result;
+        } else {
+            return null;
+        }
     }
 
     //给hospital对象封装属性
