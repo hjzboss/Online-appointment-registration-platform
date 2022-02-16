@@ -120,6 +120,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
+    //根据dictCode获取下级节点
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        Dict dict = this.getDictByDictCode(dictCode);
+        return this.findChildData(dict.getId());
+    }
+
     //根据dictCode查询dict对象
     private Dict getDictByDictCode(String dictCode) {
         QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
