@@ -20,4 +20,6 @@ public interface ScheduleService {
     Page<Schedule> findPageDepartment(int page, int limit, ScheduleQueryVo scheduleQueryVo);
     //删除排班
     void remove(String hoscode, String hosScheduleId);
+    //根据医院编号和科室编号获取排班规则
+    Map<String, Object> getRuleSchedule(Integer page, Integer limit, String hoscode, String depcode);
 }

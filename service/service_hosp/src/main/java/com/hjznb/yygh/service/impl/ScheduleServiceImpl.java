@@ -5,13 +5,19 @@ import com.hjznb.yygh.model.hosp.Department;
 import com.hjznb.yygh.model.hosp.Schedule;
 import com.hjznb.yygh.repository.ScheduleRepository;
 import com.hjznb.yygh.service.ScheduleService;
+import com.hjznb.yygh.vo.hosp.BookingScheduleRuleVo;
 import com.hjznb.yygh.vo.hosp.ScheduleQueryVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,9 +28,11 @@ import java.util.Map;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository repository;
+    private final MongoTemplate mongoTemplate;
 
-    public ScheduleServiceImpl(ScheduleRepository repository) {
+    public ScheduleServiceImpl(ScheduleRepository repository, MongoTemplate mongoTemplate) {
         this.repository = repository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -78,8 +86,34 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void remove(String hoscode, String hosScheduleId) {
         Schedule exist = repository.getScheduleByHoscodeAndHosScheduleId(hoscode, hosScheduleId);
-        if(exist != null) {
+        if (exist != null) {
             repository.deleteById(exist.getId());
         }
+    }
+
+    @Override
+    public Map<String, Object> getRuleSchedule(Integer page, Integer limit, String hoscode, String depcode) {
+        //根据医院编号和科室编号查询
+        Criteria criteria = Criteria.where("hoscode").is(hoscode).and("depcode").is(depcode);
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(criteria), //匹配条件
+                Aggregation.group("workDate") //分组字段
+                        .first("workDate").as("workDate")
+                        //统计号源数量
+                        .count().as("docCount")
+                        .sum("reservedNumber").as("reservedNumber")
+                        .sum("availableNumber").as("availableNumber"),
+                //按工作日期降序
+                Aggregation.sort(Sort.Direction.DESC, "workDate"),
+                //实现分页
+                Aggregation.skip((page - 1) * limit),
+                Aggregation.limit(limit)
+        );
+        //调用方法，最终执行
+        AggregationResults<BookingScheduleRuleVo> aggregate = mongoTemplate.aggregate(aggregation, Schedule.class, BookingScheduleRuleVo.class);
+        List<BookingScheduleRuleVo> mappedResults = aggregate.getMappedResults();
+        // todo: 完成数据的封装，分组查询的总记录数
+        return null;
     }
 }
