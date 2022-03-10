@@ -113,6 +113,15 @@ public class HospitalServiceImpl implements HospitalService {
         }
     }
 
+    @Override
+    public String getHospName(String hoscode) {
+        Hospital hospital = hospitalRepository.getHospitalByHoscode(hoscode);
+        if(hospital != null) {
+            return hospital.getHosname();
+        }
+        return null;
+    }
+
     //给hospital对象封装属性
     private void setHospitalHosType(Hospital item) {
         //调用cmn模块查询等级属性的名字

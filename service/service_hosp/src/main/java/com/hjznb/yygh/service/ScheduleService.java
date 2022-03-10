@@ -21,5 +21,5 @@ public interface ScheduleService {
     //删除排班
     void remove(String hoscode, String hosScheduleId);
     //根据医院编号和科室编号获取排班规则
-    Map<String, Object> getRuleSchedule(Integer page, Integer limit, String hoscode, String depcode);
+    Map<String, Object> getRuleSchedule(long page, long limit, String hoscode, String depcode);
 }
