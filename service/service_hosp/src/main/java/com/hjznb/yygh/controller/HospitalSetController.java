@@ -23,7 +23,6 @@ import java.util.Random;
 @Api(tags = "医院设置管理") //swagger文档中加入注解
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
-@CrossOrigin
 public class HospitalSetController {
     private final HospitalSetService hospitalSetService;
 

@@ -22,4 +22,6 @@ public interface DepartmentService {
     void remove(String hoscode, String depcode);
     //根据hoscode查询科室和所有下级科室
     List<DepartmentVo> getDeptTree(String hoscode);
+    //查询科室名称
+    String getDepName(String hoscode, String depcode);
 }

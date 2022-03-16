@@ -16,7 +16,6 @@ import java.util.List;
  * @date 2022/2/18 19:29
  */
 @RestController
-@CrossOrigin
 @Api(tags = "科室管理")
 @RequestMapping("admin/hosp/department")
 public class DepartmentController {

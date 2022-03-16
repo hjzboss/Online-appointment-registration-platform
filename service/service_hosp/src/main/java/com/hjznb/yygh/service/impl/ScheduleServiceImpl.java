@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hjznb.yygh.model.hosp.Department;
 import com.hjznb.yygh.model.hosp.Schedule;
 import com.hjznb.yygh.repository.ScheduleRepository;
+import com.hjznb.yygh.service.DepartmentService;
 import com.hjznb.yygh.service.HospitalService;
 import com.hjznb.yygh.service.ScheduleService;
 import com.hjznb.yygh.vo.hosp.BookingScheduleRuleVo;
@@ -34,11 +35,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository repository;
     private final MongoTemplate mongoTemplate;
     private final HospitalService hospitalService;
+    private final DepartmentService departmentService;
 
-    public ScheduleServiceImpl(ScheduleRepository repository, MongoTemplate mongoTemplate, HospitalService hospitalService) {
+    public ScheduleServiceImpl(ScheduleRepository repository, MongoTemplate mongoTemplate, HospitalService hospitalService, DepartmentService departmentService) {
         this.repository = repository;
         this.mongoTemplate = mongoTemplate;
         this.hospitalService = hospitalService;
+        this.departmentService = departmentService;
     }
 
     @Override
@@ -113,9 +116,9 @@ public class ScheduleServiceImpl implements ScheduleService {
                         .sum("reservedNumber").as("reservedNumber")
                         .sum("availableNumber").as("availableNumber"),
                 //排序
-                Aggregation.sort(Sort.Direction.DESC,"workDate"),
+                Aggregation.sort(Sort.Direction.ASC, "workDate"),
                 //4 实现分页
-                Aggregation.skip((page-1)*limit),
+                Aggregation.skip((page - 1) * limit),
                 Aggregation.limit(limit)
         );
         //调用方法，最终执行
@@ -134,7 +137,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         int total = totalAggResults.getMappedResults().size();
 
         //把日期对应星期获取
-        for(BookingScheduleRuleVo bookingScheduleRuleVo:bookingScheduleRuleVoList) {
+        for (BookingScheduleRuleVo bookingScheduleRuleVo : bookingScheduleRuleVoList) {
             Date workDate = bookingScheduleRuleVo.getWorkDate();
             String dayOfWeek = this.getDayOfWeek(new DateTime(workDate));
             bookingScheduleRuleVo.setDayOfWeek(dayOfWeek);
@@ -142,18 +145,38 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         //设置最终数据，进行返回
         Map<String, Object> result = new HashMap<>();
-        result.put("bookingScheduleRuleList",bookingScheduleRuleVoList);
-        result.put("total",total);
+        result.put("bookingScheduleRuleList", bookingScheduleRuleVoList);
+        result.put("total", total);
 
         //获取医院名称
         String hosName = hospitalService.getHospName(hoscode);
         //其他基础数据
         Map<String, String> baseMap = new HashMap<>();
-        baseMap.put("hosname",hosName);
-        result.put("baseMap",baseMap);
+        baseMap.put("hosname", hosName);
+        result.put("baseMap", baseMap);
 
         return result;
 
+    }
+
+    /**
+     * 根据医院编号、科室编号和工作日期，查询排班详细信息
+     */
+    @Override
+    public List<Schedule> getDetailSchedule(String hoscode, String depcode, String workDate) {
+        List<Schedule> scheduleList = repository.findScheduleByHoscodeAndDepcodeAndWorkDate(hoscode, depcode, new DateTime(workDate).toDate());
+        scheduleList.forEach(this::packageSchedule);
+        return scheduleList;
+    }
+
+    //封装排班详情其他值
+    private void packageSchedule(Schedule schedule) {
+        //设置医院名称
+        schedule.getParam().put("hosname", hospitalService.getHospName(schedule.getHoscode()));
+        //设置科室名称
+        schedule.getParam().put("depname", departmentService.getDepName(schedule.getHoscode(), schedule.getDepcode()));
+        //设置日期对应星期
+        schedule.getParam().put("dayOfWeek", this.getDayOfWeek(new DateTime(schedule.getWorkDate())));
     }
 
     /**
