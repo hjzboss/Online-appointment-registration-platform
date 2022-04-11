@@ -7,10 +7,12 @@
         <span class="v-link clickable dark" :onclick="'javascript:window.location=\'/hospital/'+hospital.hoscode+'\''">预约挂号 </span>
       </div>
       <div class="nav-item selected">
-        <span class="v-link selected dark" :onclick="'javascript:window.location=\'/hospital/detail/'+hospital.hoscode+'\''"> 医院详情 </span>
+        <span class="v-link selected dark"
+              :onclick="'javascript:window.location=\'/hospital/detail/'+hospital.hoscode+'\''"> 医院详情 </span>
       </div>
       <div class="nav-item">
-        <span class="v-link clickable dark" :onclick="'javascript:window.location=\'/hospital/notice/'+hospital.hoscode+'\''"> 预约须知 </span>
+        <span class="v-link clickable dark"
+              :onclick="'javascript:window.location=\'/hospital/notice/'+hospital.hoscode+'\''"> 预约须知 </span>
       </div>
       <div class="nav-item "><span
         class="v-link clickable dark"> 停诊信息 </span>
@@ -29,7 +31,8 @@
             <div class="icon-wrapper"><span class="iconfont"></span> {{ hospital.param.hostypeString }}</div>
           </div>
         </div>
-        <div class="info-wrapper"><img :src="'data:image/jpeg;base64,'+hospital.logoData" :alt="hospital.hosname" style="width: 80px; height: 80px;">
+        <div class="info-wrapper"><img :src="'data:image/jpeg;base64,'+hospital.logoData" :alt="hospital.hosname"
+                                       style="width: 80px; height: 80px;">
           <div class="content-wrapper">
             <div></div>
             <div></div>
@@ -55,6 +58,7 @@ import '~/assets/css/hospital_personal.css'
 import '~/assets/css/hospital.css'
 
 import hospitalApi from '@/api/hosp'
+
 export default {
   data() {
     return {
@@ -82,20 +86,20 @@ export default {
 }
 </script>
 <style>
-  .hospital-detail .info-wrapper {
-    width: 100%;
-    padding-left: 0;
-    padding-top: 0;
-    margin-top: 0;
-    flex-direction: inherit;
-  }
+.hospital-detail .info-wrapper {
+  width: 100%;
+  padding-left: 0;
+  padding-top: 0;
+  margin-top: 0;
+  flex-direction: inherit;
+}
 
-  .hospital-detail .info-wrapper .text {
-    font-size: 14px;
+.hospital-detail .info-wrapper .text {
+  font-size: 14px;
 
-  }
+}
 
-  .hospital-detail .content-wrapper p {
-    text-indent: 0;
-  }
+.hospital-detail .content-wrapper p {
+  text-indent: 0;
+}
 </style>

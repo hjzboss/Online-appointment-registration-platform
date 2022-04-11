@@ -9,7 +9,7 @@
           :onclick="
             'javascript:window.location=\'/hospital/' + hospital.hoscode + '\''
           "
-          >预约挂号
+        >预约挂号
         </span>
       </div>
       <div class="nav-item">
@@ -80,10 +80,10 @@
             <div class="line">
               <span class="label">退号时间：</span>
               <span v-if="bookingRule.quitDay == -1"
-                >就诊前一工作日{{ bookingRule.quitTime }}前取消</span
+              >就诊前一工作日{{ bookingRule.quitTime }}前取消</span
               >
               <span v-if="bookingRule.quitDay == 0"
-                >就诊前当天{{ bookingRule.quitTime }}前取消</span
+              >就诊前当天{{ bookingRule.quitTime }}前取消</span
               >
             </div>
             <div style="margin-top: 20px">医院预约规则</div>

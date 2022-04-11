@@ -9,7 +9,7 @@
           :onclick="
             'javascript:window.location=\'/hospital/' + hospital.hoscode + '\''
           "
-          >预约挂号
+        >预约挂号
         </span>
       </div>
       <div class="nav-item">
@@ -94,6 +94,7 @@ import "~/assets/css/hospital_personal.css";
 import "~/assets/css/hospital.css";
 
 import hospitalApi from "@/api/hosp";
+
 export default {
   data() {
     return {

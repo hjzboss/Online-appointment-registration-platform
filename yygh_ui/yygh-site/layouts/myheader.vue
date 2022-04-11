@@ -25,7 +25,7 @@
             <span
               slot="suffix"
               class="search-btn v-link highlight clickable selected"
-              >搜索
+            >搜索
             </span>
           </el-autocomplete>
         </div>
@@ -38,7 +38,7 @@
           class="v-link clickable"
           @click="showLogin()"
           id="loginDialog"
-          >登录/注册</span
+        >登录/注册</span
         >
         <el-dropdown v-if="name != ''" @command="loginMenu">
           <span class="el-dropdown-link">
@@ -49,7 +49,8 @@
             <el-dropdown-item command="/order">挂号订单</el-dropdown-item>
             <el-dropdown-item command="/patient">就诊人管理</el-dropdown-item>
             <el-dropdown-item command="/logout" divided
-              >退出登录</el-dropdown-item
+            >退出登录
+            </el-dropdown-item
             >
           </el-dropdown-menu>
         </el-dropdown>
@@ -210,7 +211,7 @@ export default {
       this.dialogUserFormVisible = true;
 
       // 初始化登录层相关参数
-      this.dialogAtrr = { ...defaultDialogAtrr };
+      this.dialogAtrr = {...defaultDialogAtrr};
     },
 
     // 登录
@@ -242,8 +243,8 @@ export default {
     },
 
     setCookies(name, token) {
-      cookie.set("token", token, { domain: "localhost" });
-      cookie.set("name", name, { domain: "localhost" });
+      cookie.set("token", token, {domain: "localhost"});
+      cookie.set("name", name, {domain: "localhost"});
       window.location.reload();
     },
     // 关闭登录层
@@ -263,8 +264,8 @@ export default {
 
     loginMenu(command) {
       if ("/logout" == command) {
-        cookie.set("name", "", { domain: "localhost" });
-        cookie.set("token", "", { domain: "localhost" });
+        cookie.set("name", "", {domain: "localhost"});
+        cookie.set("token", "", {domain: "localhost"});
 
         //跳转页面
         window.location.href = "/";
