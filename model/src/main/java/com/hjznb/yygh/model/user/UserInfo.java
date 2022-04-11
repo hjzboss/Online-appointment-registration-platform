@@ -29,9 +29,13 @@ public class UserInfo extends BaseEntity {
 	@TableField("nick_name")
 	private String nickName;
 
-	@ApiModelProperty(value = "手机号")
-	@TableField("phone")
-	private String phone;
+	@ApiModelProperty(value = "用户名")
+	@TableField("username")
+	private String username;
+
+	@ApiModelProperty(value = "密码")
+	@TableField("password")
+	private String password;
 
 	@ApiModelProperty(value = "用户姓名")
 	@TableField("name")

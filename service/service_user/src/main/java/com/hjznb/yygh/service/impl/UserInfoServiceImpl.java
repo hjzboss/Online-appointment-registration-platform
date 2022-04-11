@@ -14,6 +14,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author hjz
@@ -26,28 +28,28 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     //会员登录
     @Override
     public Map<String, Object> login(LoginVo loginVo) {
-        //获取手机号和验证码
-        String phone = loginVo.getPhone();
-        String code = loginVo.getCode();
+        //获取用户名和密码
+        String username = loginVo.getUsername();
+        String password = loginVo.getPassword();
         //校验参数
-        if (StringUtils.isEmpty(phone) ||
-                StringUtils.isEmpty(code)) {
+        if (StringUtils.isEmpty(username) ||
+                StringUtils.isEmpty(password)) {
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
+        //TODO 校验密码
 
-        //TODO 校验校验验证码
-
-        //手机号已被使用
+        //用户名已被使用
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone", phone);
-        //获取会员，如果第一次登录则创建信息
+        queryWrapper.eq("username", username);
+        //获取会员，如果不存在则需要先注册
         UserInfo userInfo = baseMapper.selectOne(queryWrapper);
         if (null == userInfo) {
-            userInfo = new UserInfo();
-            userInfo.setName("");
-            userInfo.setPhone(phone);
-            userInfo.setStatus(1);
-            this.save(userInfo);
+//            userInfo = new UserInfo();
+//            userInfo.setName("");
+//            userInfo.setUsername(username);
+//            userInfo.setStatus(1);
+//            this.save(userInfo);
+            throw new YyghException(ResultCodeEnum.USERNAME_ERROR);
         }
         //校验是否被禁用
         if (userInfo.getStatus() == 0) {
@@ -63,7 +65,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             name = userInfo.getNickName();
         }
         if (StringUtils.isEmpty(name)) {
-            name = userInfo.getPhone();
+            name = userInfo.getUsername();
         }
         map.put("name", name);
         //jwt生成token字符串

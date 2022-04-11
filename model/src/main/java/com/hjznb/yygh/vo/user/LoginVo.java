@@ -11,11 +11,11 @@ public class LoginVo {
     @ApiModelProperty(value = "openid")
     private String openid;
 
-    @ApiModelProperty(value = "手机号")
-    private String phone;
+    @ApiModelProperty(value = "用户名")
+    private String username;
 
     @ApiModelProperty(value = "密码")
-    private String code;
+    private String password;
 
     @ApiModelProperty(value = "IP")
     private String ip;
