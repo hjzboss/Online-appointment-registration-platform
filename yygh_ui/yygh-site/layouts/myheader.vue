@@ -68,29 +68,29 @@
         <!-- 用户名账号登录 #start -->
         <div
           class="operate-view"
-          v-if="dialogAtrr.showLoginType === 'username'"
+          v-if="dialogAtrr.showLoginType == 'username'"
         >
           <div class="wrapper" style="width: 100%">
             <div class="mobile-wrapper" style="position: static; width: 70%">
-              <span class="title">{{ dialogAtrr.labelTips }}</span>
               <el-form>
                 <el-form-item>
+                  <span class="title">{{ dialogAtrr.labelTips }}</span>
                   <el-input
                     v-model="dialogAtrr.inputValue"
                     :placeholder="dialogAtrr.placeholder"
                     :maxlength="dialogAtrr.maxlength"
-                    class="input v-input"
+                    class="v-input input"
                   >
                   </el-input>
                 </el-form-item>
               </el-form>
-              <span class="title">密码</span>
               <el-form>
                 <el-form-item>
+                  <span class="title">密码</span>
                   <el-input
-                    v-model="userInfo.password"
+                    v-model="dialogAtrr.inputValue1"
                     :maxlength="20"
-                    class="input v-input"
+                    class="v-input"
                     show-password
                   >
                   </el-input>
@@ -159,6 +159,7 @@ const defaultDialogAtrr = {
   labelTips: "用户名", // 输入框提示
 
   inputValue: "", // 输入框绑定对象
+  inputValue1: "", // 输入框绑定对象
   placeholder: "请输入账号", // 输入框placeholder
   maxlength: 11, // 输入框长度控制
 
@@ -204,6 +205,7 @@ export default {
     // 登录
     login() {
       this.userInfo.username = this.dialogAtrr.inputValue;
+      this.userInfo.password = this.dialogAtrr.inputValue1;
 
       if (this.dialogAtrr.loginBtn === "正在登录...") {
         this.$message.error("请勿重复登录");

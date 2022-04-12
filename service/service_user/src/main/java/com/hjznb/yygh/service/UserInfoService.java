@@ -14,4 +14,7 @@ import java.util.Map;
 public interface UserInfoService extends IService<UserInfo> {
     //会员登录
     Map<String, Object> login(LoginVo loginVo);
+
+    //会员注册
+    Map<String, Object> regist(LoginVo loginVo);
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjznb.yygh.common.exception.YyghException;
 import com.hjznb.yygh.common.helper.JwtHelper;
 import com.hjznb.yygh.common.result.ResultCodeEnum;
+import com.hjznb.yygh.common.utils.MD5;
 import com.hjznb.yygh.mapper.UserInfoMapper;
 import com.hjznb.yygh.model.user.UserInfo;
 import com.hjznb.yygh.service.UserInfoService;
@@ -36,33 +37,27 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
                 StringUtils.isEmpty(password)) {
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
-        //TODO 校验密码
-
         //用户名已被使用
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         //获取会员，如果不存在则需要先注册
         UserInfo userInfo = baseMapper.selectOne(queryWrapper);
         if (null == userInfo) {
-//            userInfo = new UserInfo();
-//            userInfo.setName("");
-//            userInfo.setUsername(username);
-//            userInfo.setStatus(1);
-//            this.save(userInfo);
             throw new YyghException(ResultCodeEnum.USERNAME_ERROR);
+        }
+        //校验密码
+        if(!userInfo.getPassword().equals(MD5.encrypt(password))) {
+            throw new YyghException(ResultCodeEnum.PASSWORD_ERROR);
         }
         //校验是否被禁用
         if (userInfo.getStatus() == 0) {
             throw new YyghException(ResultCodeEnum.LOGIN_DISABLED_ERROR);
         }
-
-        //TODO 记录登录
-
         //返回登录信息
         Map<String, Object> map = new HashMap<>();
         String name = userInfo.getName();
         if (StringUtils.isEmpty(name)) {
-            name = userInfo.getNickName();
+            name = username;
         }
         if (StringUtils.isEmpty(name)) {
             name = userInfo.getUsername();
@@ -73,6 +68,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         map.put("token", token);
         return map;
 
+    }
+
+    // TODO: 用户注册
+    @Override
+    public Map<String, Object> regist(LoginVo loginVo) {
+
+        return null;
     }
 }
 

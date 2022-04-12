@@ -18,10 +18,10 @@ public enum ResultCodeEnum {
     LOGIN_AUTH(208, "未登陆"),
     PERMISSION(209, "没有权限"),
 
-    CODE_ERROR(210, "验证码错误"),
+    PASSWORD_ERROR(210, "密码错误"),
     //    LOGIN_MOBLE_ERROR(211, "账号不正确"),
     LOGIN_DISABLED_ERROR(212, "改用户已被禁用"),
-    REGISTER_MOBLE_ERROR(213, "手机号已被使用"),
+    REGISTER_MOBLE_ERROR(213, "用户名已被使用"),
     LOGIN_AURH(214, "需要登录"),
     LOGIN_ACL(215, "没有权限"),
 

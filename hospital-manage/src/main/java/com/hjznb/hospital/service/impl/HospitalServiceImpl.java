@@ -58,7 +58,7 @@ public class HospitalServiceImpl implements HospitalService {
         Long patientId = this.savePatient(patient);
 
         Map<String, Object> resultMap = new HashMap<>();
-        int availableNumber = schedule.getAvailableNumber().intValue() - 1;
+        int availableNumber = schedule.getAvailableNumber() - 1;
         if (availableNumber > 0) {
             schedule.setAvailableNumber(availableNumber);
             hospitalMapper.updateById(schedule);
@@ -67,7 +67,7 @@ public class HospitalServiceImpl implements HospitalService {
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setPatientId(patientId);
             orderInfo.setScheduleId(Long.parseLong(hosScheduleId));
-            int number = schedule.getReservedNumber().intValue() - schedule.getAvailableNumber().intValue();
+            int number = schedule.getReservedNumber() - schedule.getAvailableNumber();
             orderInfo.setNumber(number);
             orderInfo.setAmount(new BigDecimal(amount));
             String fetchTime = "0".equals(reserveDate) ? " 09:30前" : " 14:00前";
