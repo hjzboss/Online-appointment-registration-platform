@@ -63,7 +63,6 @@
       top="50px"
       :append-to-body="true"
       width="960px"
-      @close="closeDialog()"
     >
       <div class="container">
         <!-- 用户名账号登录 #start -->
@@ -101,12 +100,6 @@
                 {{ dialogAtrr.loginBtn }}
               </div>
             </div>
-            <div class="bottom">
-              <div class="wechat-wrapper" @click="weixinLogin()">
-                <span class="iconfont icon"></span>
-              </div>
-              <span class="third-text"> 第三方账号登录 </span>
-            </div>
           </div>
         </div>
         <!-- 用户名登录 #end -->
@@ -119,7 +112,7 @@
             </div>
             <div class="bottom wechat" style="margin-top: -80px">
               <div class="phone-container">
-                <div class="phone-wrapper" @click="phoneLogin()">
+                <div class="phone-wrapper" @click="usernameLogin()">
                   <span class="iconfont icon"></span>
                 </div>
                 <span class="third-text"> 微信扫码登录 </span>
@@ -131,16 +124,10 @@
 
         <div class="info-wrapper">
           <div class="code-wrapper">
-            <div>
-              <img
-                src="//img.114yygh.com/static/web/code_login_wechat.png"
-                class="code-img"
-              />
-              <div class="code-text">
-                <span class="iconfont icon"></span>微信扫一扫关注
-              </div>
-              <div class="code-text">“快速预约挂号”</div>
+            <div class="wechat-wrapper" @click="weixinLogin()">
+              <span class="iconfont icon"></span>
             </div>
+            <span class="third-text"> 第三方账号登录 </span>
             <div class="wechat-code-wrapper">
               <img
                 src="//img.114yygh.com/static/web/code_app.png"
@@ -218,12 +205,12 @@ export default {
     login() {
       this.userInfo.username = this.dialogAtrr.inputValue;
 
-      if (this.dialogAtrr.loginBtn == "正在登录...") {
+      if (this.dialogAtrr.loginBtn === "正在登录...") {
         this.$message.error("请勿重复登录");
         return;
       }
       //4到16位（字母，数字，下划线，减号）
-      var uPattern = /^[a-zA-Z0-9_-]{4,16}$/;
+      const uPattern = /^[a-zA-Z0-9_-]{4,16}$/;
       if (!uPattern.test(this.userInfo.username)) {
         this.$message.error("用户名格式不正确");
         return;
@@ -247,12 +234,6 @@ export default {
       cookie.set("name", name, {domain: "localhost"});
       window.location.reload();
     },
-    // 关闭登录层
-    closeDialog() {
-      if (this.clearSmsTime) {
-        clearInterval(this.clearSmsTime);
-      }
-    },
 
     showInfo() {
       let token = cookie.get("token");
@@ -263,7 +244,7 @@ export default {
     },
 
     loginMenu(command) {
-      if ("/logout" == command) {
+      if ("/logout" === command) {
         cookie.set("name", "", {domain: "localhost"});
         cookie.set("token", "", {domain: "localhost"});
 
@@ -282,7 +263,7 @@ export default {
       this.dialogAtrr.showLoginType = "weixin";
     },
 
-    phoneLogin() {
+    usernameLogin() {
       this.dialogAtrr.showLoginType = "username";
       this.showLogin();
     },
