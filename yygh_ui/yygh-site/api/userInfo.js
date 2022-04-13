@@ -9,5 +9,12 @@ export default {
       method: `post`,
       data: userInfo
     })
+  },
+  regist(userInfo) {
+    return request({
+      url: `${api_name}/regist`,
+      method: `post`,
+      data: userInfo
+    })
   }
 }

@@ -34,13 +34,13 @@
       <div class="right-wrapper">
         <span class="v-link clickable">帮助中心</span>
         <span
-          v-if="name == ''"
+          v-if="name === ''"
           class="v-link clickable"
           @click="showLogin()"
           id="loginDialog"
         >登录/注册</span
         >
-        <el-dropdown v-if="name != ''" @command="loginMenu">
+        <el-dropdown v-if="name !== ''" @command="loginMenu">
           <span class="el-dropdown-link">
             {{ name }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
@@ -68,7 +68,7 @@
         <!-- 用户名账号登录 #start -->
         <div
           class="operate-view"
-          v-if="dialogAtrr.showLoginType == 'username'"
+          v-if="dialogAtrr.showLoginType === 'username'"
         >
           <div class="wrapper" style="width: 100%">
             <div class="mobile-wrapper" style="position: static; width: 70%">
@@ -90,19 +90,81 @@
                   <el-input
                     v-model="dialogAtrr.inputValue1"
                     :maxlength="20"
-                    class="v-input"
+                    class="v-input input"
                     show-password
                   >
                   </el-input>
                 </el-form-item>
               </el-form>
-              <div class="send-button v-button" @click="btnClick()">
+              <div class="send-button v-button" @click="login()">
+                {{ dialogAtrr.loginBtn }}
+              </div>
+              <div class="send-button v-button" @click="regist()">
+                注册
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 用户名账号登录 #end -->
+
+        <!-- 用户名账号注册 #start -->
+        <div
+          class="operate-view"
+          v-if="dialogAtrr.showLoginType === 'regist'"
+        >
+          <div class="wrapper" style="width: 100%">
+            <div class="mobile-wrapper" style="position: static; width: 70%">
+              <el-form>
+                <el-form-item>
+                  <span class="title">{{ dialogAtrr.labelTips }}</span>
+                  <el-input
+                    v-model="dialogAtrr.inputValue"
+                    :placeholder="dialogAtrr.placeholder"
+                    :maxlength="dialogAtrr.maxlength"
+                    class="v-input"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-form>
+              <el-form>
+                <el-form-item>
+                  <span class="title">密码</span>
+                  <el-input
+                    v-model="dialogAtrr.inputValue1"
+                    :maxlength="20"
+                    class="v-input"
+                    show-password
+                  >
+                  </el-input>
+                </el-form-item>
+                <el-form-item>
+                  <span class="title">确认密码</span>
+                  <el-input
+                    v-model="dialogAtrr.inputValue2"
+                    :maxlength="20"
+                    class="v-input"
+                    show-password
+                  >
+                  </el-input>
+                </el-form-item>
+                <el-form-item>
+                  <span class="title">手机号</span>
+                  <el-input
+                    v-model="dialogAtrr.inputValue3"
+                    :maxlength="11"
+                    class="v-input"
+                    :placeholder="dialogAtrr.placeholder1"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-form>
+              <div class="send-button1 v-button" @click="registSend()">
                 {{ dialogAtrr.loginBtn }}
               </div>
             </div>
           </div>
         </div>
-        <!-- 用户名登录 #end -->
+        <!-- 用户名账号注册 #end -->
 
         <!-- 微信登录 #start -->
         <div class="operate-view" v-if="dialogAtrr.showLoginType === 'weixin'">
@@ -160,7 +222,10 @@ const defaultDialogAtrr = {
 
   inputValue: "", // 输入框绑定对象
   inputValue1: "", // 输入框绑定对象
+  inputValue2: "",
+  inputValue3: "",
   placeholder: "请输入账号", // 输入框placeholder
+  placeholder1: "请输入手机号", // 输入框placeholder
   maxlength: 11, // 输入框长度控制
 
   loginBtn: "登录", // 登录按钮或获取验证码按钮文本
@@ -173,6 +238,7 @@ export default {
         username: "",
         password: "",
         openid: "",
+        phone: ""
       },
 
       dialogUserFormVisible: false,
@@ -188,10 +254,51 @@ export default {
     this.showInfo();
   },
   methods: {
-    // 绑定登录或获取验证码按钮
-    btnClick() {
-      // 登录
-      this.login();
+    // 注册
+    regist() {
+      this.dialogAtrr.showLoginType = "regist";
+      this.dialogAtrr.loginBtn = "注册"
+    },
+    // 发送注册请求
+    registSend() {
+      //至少8位且必有数字+特殊字符+字母
+      let passwordReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]])[A-Za-z\d`~!@#$%^&*()_+<>?:"{},.\/\\;'[\]]{8,}$/;
+      let username = this.dialogAtrr.inputValue;
+      let password = this.dialogAtrr.inputValue1;
+      let passwordRepeat = this.dialogAtrr.inputValue2;
+      let phone = this.dialogAtrr.inputValue3
+      //4到16位（字母，数字，下划线，减号）
+      let usernameReg = /^[a-zA-Z0-9_-]{4,16}$/;
+      let phoneReg = /^[a-zA-Z0-9_-]{4,16}$/;
+      if (!usernameReg.test(username)) {
+        this.$message.error("用户名必须为4到16位的字母，数字，下划线，减号组合！");
+        return;
+      }
+      if (!passwordReg.test(password)) {
+        this.$message.error("密码至少8位且必有数字+特殊字符+字母！");
+        return;
+      }
+      if (password !== passwordRepeat) {
+        this.$message.error("两次密码输入不一致！");
+        return;
+      }
+      if (!phoneReg.test(phone)) {
+        this.$message.error("手机号码有误！");
+        return;
+      }
+      this.userInfo.username = username;
+      this.userInfo.password = password;
+      this.userInfo.phone = phone;
+      this.dialogAtrr.loginBtn = "正在注册...";
+
+      userInfoApi.regist(this.userInfo)
+        .then(response => {
+        this.$message.info("注册成功！")
+        this.usernameLogin()
+      })
+        .catch(e => {
+        this.$message.error("注册失败！");
+      })
     },
 
     // 绑定登录，点击显示登录层
@@ -212,7 +319,7 @@ export default {
         return;
       }
       //4到16位（字母，数字，下划线，减号）
-      const uPattern = /^[a-zA-Z0-9_-]{4,16}$/;
+      let uPattern = /^[a-zA-Z0-9_-]{4,16}$/;
       if (!uPattern.test(this.userInfo.username)) {
         this.$message.error("用户名格式不正确");
         return;
