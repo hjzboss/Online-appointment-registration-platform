@@ -9,7 +9,7 @@
           height="50"
           src="~assets/images/logo.png"
         />
-        <span class="text">陕医通 预约挂号统一平台</span>
+        <span class="text">陕医通预约挂号统一平台</span>
       </div>
       <!-- 搜索框 -->
       <div class="search-wrapper">
@@ -17,8 +17,6 @@
           <el-autocomplete
             class="search-input small"
             prefix-icon="el-icon-search"
-            v-model="state"
-            :fetch-suggestions="querySearchAsync"
             placeholder="点击输入医院名称"
             @select="handleSelect"
           >
@@ -63,6 +61,7 @@
       top="50px"
       :append-to-body="true"
       width="960px"
+      v-if="dialogUserFormVisible"
     >
       <div class="container">
         <!-- 用户名账号登录 #start -->
@@ -244,15 +243,23 @@ export default {
       dialogUserFormVisible: false,
       // 弹出层相关属性
       dialogAtrr: defaultDialogAtrr,
-      name: "", // 用户登录显示的名称
-      querySearchAsync: [],
-      state: null,
+      name: "" // 用户登录显示的名称
     };
   },
 
   created() {
     this.showInfo();
   },
+  mounted() {
+    // 注册全局登录事件对象
+    window.loginEvent = new Vue();
+    // 监听登录事件
+    loginEvent.$on('loginDialogEvent', function () {
+      document.getElementById("loginDialog").click();
+    })
+    // 触发事件，显示登录层：loginEvent.$emit('loginDialogEvent')
+  },
+
   methods: {
     // 注册
     regist() {
@@ -293,12 +300,12 @@ export default {
 
       userInfoApi.regist(this.userInfo)
         .then(response => {
-        this.$message.info("注册成功！")
-        this.usernameLogin()
-      })
+          this.$message.info("注册成功！")
+          this.usernameLogin()
+        })
         .catch(e => {
-        this.$message.error("注册失败！");
-      })
+          this.dialogAtrr.loginBtn = "注册";
+        })
     },
 
     // 绑定登录，点击显示登录层
@@ -333,8 +340,7 @@ export default {
           this.setCookies(response.data.name, response.data.token);
         })
         .catch((e) => {
-          // this.dialogAtrr.loginBtn = "马上登录";
-          this.$message.error("请先注册！");
+          this.dialogAtrr.loginBtn = "登录";
         });
     },
 

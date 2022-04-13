@@ -1,5 +1,7 @@
 package com.hjznb.yygh;
 
+import com.hjznb.yygh.common.utils.MD5;
+
 /**
  * @author hjz
  * @version 1.0
@@ -7,8 +9,8 @@ package com.hjznb.yygh;
  */
 public class test {
     public static void main(String[] args) {
-        String username = "hjzboss";
-        String regExp = "^[^0-9][\\w_]{5,9}$";
-        System.out.println(username.matches(regExp));
+        String str = "e10adc3949ba59abbe56e057f20f883e";
+        String a = MD5.encrypt("123456");
+        System.out.println(a.equals(str));
     }
 }

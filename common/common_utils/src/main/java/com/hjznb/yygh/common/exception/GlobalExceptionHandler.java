@@ -1,7 +1,6 @@
 package com.hjznb.yygh.common.exception;
 
 import com.hjznb.yygh.common.result.Result;
-import com.hjznb.yygh.vo.excep.ExcepVo;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +28,9 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result error(YyghException e) {
         e.printStackTrace();
-        return Result.fail(new ExcepVo(e.getCode(), e.getMessage()));
+        if(e.getCode() == null || e.getMessage() == null) {
+            return Result.fail();
+        }
+        return Result.fail(e.getCode(), e.getMessage());
     }
 }

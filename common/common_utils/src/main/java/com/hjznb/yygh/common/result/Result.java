@@ -23,6 +23,13 @@ public class Result<T> {
     public Result() {
     }
 
+    public Result(Integer code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
+
     protected static <T> Result<T> build(T data) {
         Result<T> result = new Result<T>();
         if (data != null)
@@ -64,6 +71,7 @@ public class Result<T> {
         return Result.fail(null);
     }
 
+
     /**
      * 操作失败
      *
@@ -74,6 +82,10 @@ public class Result<T> {
     public static <T> Result<T> fail(T data) {
         Result<T> result = build(data);
         return build(data, ResultCodeEnum.FAIL);
+    }
+
+    public static Result fail(Integer code, String message) {
+        return new Result(code, message, null);
     }
 
     public Result<T> message(String msg) {
