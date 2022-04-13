@@ -7,6 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultCodeEnum {
+    USER_EXIST(271, "用户已存在"),
     USERNAME_ERROR(270, "用户未注册"),
     SUCCESS(200, "成功"),
     FAIL(201, "失败"),

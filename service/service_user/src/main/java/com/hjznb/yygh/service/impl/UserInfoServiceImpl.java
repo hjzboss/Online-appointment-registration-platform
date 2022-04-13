@@ -46,7 +46,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             throw new YyghException(ResultCodeEnum.USERNAME_ERROR);
         }
         //校验密码
-        if(!userInfo.getPassword().equals(MD5.encrypt(password))) {
+        if (!userInfo.getPassword().equals(MD5.encrypt(password))) {
             throw new YyghException(ResultCodeEnum.PASSWORD_ERROR);
         }
         //校验是否被禁用
@@ -67,14 +67,36 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String token = JwtHelper.createToken(userInfo.getId(), name);
         map.put("token", token);
         return map;
-
     }
 
-    // TODO: 用户注册
     @Override
-    public Map<String, Object> regist(LoginVo loginVo) {
-
-        return null;
+    public void regist(LoginVo loginVo) {
+        //获取用户名和密码
+        String username = loginVo.getUsername();
+        String password = loginVo.getPassword();
+        String phone = loginVo.getPhone();
+        Map<String, Object> map = new HashMap<>();
+        //校验参数
+        if (StringUtils.isEmpty(username) ||
+                StringUtils.isEmpty(password) || StringUtils.isEmpty(phone)) {
+            throw new YyghException(ResultCodeEnum.PARAM_ERROR);
+        }
+        //用户名已被使用
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        //注册会员信息
+        UserInfo userInfo = baseMapper.selectOne(queryWrapper);
+        if (null == userInfo) {
+            userInfo = new UserInfo();
+            userInfo.setName("");
+            userInfo.setPhone(phone);
+            userInfo.setStatus(1);
+            userInfo.setUsername(username);
+            userInfo.setPassword(MD5.encrypt(password));
+            this.save(userInfo);
+        } else {
+            throw new YyghException(ResultCodeEnum.USER_EXIST);
+        }
     }
 }
 

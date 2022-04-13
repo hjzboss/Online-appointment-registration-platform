@@ -16,5 +16,5 @@ public interface UserInfoService extends IService<UserInfo> {
     Map<String, Object> login(LoginVo loginVo);
 
     //会员注册
-    Map<String, Object> regist(LoginVo loginVo);
+    void regist(LoginVo loginVo);
 }

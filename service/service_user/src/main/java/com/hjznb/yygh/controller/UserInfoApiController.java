@@ -36,4 +36,11 @@ public class UserInfoApiController {
         return Result.ok(info);
     }
 
+    @ApiOperation(value = "会员注册")
+    @PostMapping("regist")
+    public Result regist(@RequestBody LoginVo loginVo, HttpServletRequest request) {
+        loginVo.setIp(IpUtil.getIpAddr(request));
+        userInfoService.regist(loginVo);
+        return Result.ok();
+    }
 }

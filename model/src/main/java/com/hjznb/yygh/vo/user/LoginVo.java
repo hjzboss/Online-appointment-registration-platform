@@ -17,6 +17,9 @@ public class LoginVo {
     @ApiModelProperty(value = "密码")
     private String password;
 
+    @ApiModelProperty(value = "手机号")
+    private String phone;
+
     @ApiModelProperty(value = "IP")
     private String ip;
 }
