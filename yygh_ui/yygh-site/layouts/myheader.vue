@@ -101,6 +101,11 @@
               <div class="send-button v-button" @click="regist()">
                 注册
               </div>
+              <div class="bottom">
+                <div class="wechat1" @click="weixinLogin()"><span
+                  class="iconfont icon"></span></div>
+                <span class="third-text"> 第三方账号登录 </span></div>
+
             </div>
           </div>
         </div>
@@ -185,10 +190,11 @@
 
         <div class="info-wrapper">
           <div class="code-wrapper">
-            <div class="wechat-wrapper" @click="weixinLogin()">
-              <span class="iconfont icon"></span>
+            <div><img src="//img.114yygh.com/static/web/code_login_wechat.png" class="code-img">
+              <div class="code-text">微信扫一扫关注
+              </div>
+              <div class="code-text"> “快速预约挂号”</div>
             </div>
-            <span class="third-text"> 第三方账号登录 </span>
             <div class="wechat-code-wrapper">
               <img
                 src="//img.114yygh.com/static/web/code_app.png"

@@ -2262,11 +2262,11 @@ input::-ms-input-placeholder {
 }
 
 .operate-view .wrapper .input {
-  margin-top: 30px
+  margin-top: 10px
 }
 
 .operate-view .wrapper .send-button {
-  margin-top: 30px
+  margin-top: 10px
 }
 
 .send-button1 {
@@ -2297,7 +2297,7 @@ input::-ms-input-placeholder {
   margin-top: 15px
 }
 
-.operate-view .wrapper .bottom .phone-container, .operate-view .wrapper .bottom .wechat-wrapper {
+.operate-view .wrapper .bottom .phone-container, .operate-view .wrapper .bottom .wechat-wrapper .wechat1{
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2327,7 +2327,39 @@ input::-ms-input-placeholder {
   user-select: none
 }
 
+.wechat1 {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background: #00c25f;
+  color: #fff;
+  margin-top: 50px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
+.wechat1 {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background: #00c25f;
+  color: #fff;
+  margin-top: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
 .operate-view .wrapper .bottom .wechat-wrapper:hover {
+  background: #00b157
+}
+
+.wechat1:hover {
   background: #00b157
 }
 
