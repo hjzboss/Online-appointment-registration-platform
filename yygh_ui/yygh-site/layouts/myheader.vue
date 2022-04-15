@@ -38,6 +38,7 @@
           id="loginDialog"
         >登录/注册</span
         >
+
         <el-dropdown v-if="name !== ''" @command="loginMenu">
           <span class="el-dropdown-link">
             {{ name }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -211,12 +212,13 @@
         </div>
       </div>
     </el-dialog>
+    <div></div>
   </div>
 </template>
 <script>
 import cookie from "js-cookie";
 import Vue from "vue";
-
+import weixinApi from '@/api/weixin'
 import userInfoApi from "@/api/userInfo";
 import hospitalApi from "@/api/hosp";
 
@@ -264,6 +266,18 @@ export default {
       document.getElementById("loginDialog").click();
     })
     // 触发事件，显示登录层：loginEvent.$emit('loginDialogEvent')
+    // 初始化微信js
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = 'https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js'
+    document.body.appendChild(script)
+
+    // 微信登录回调处理
+    let self = this;
+    window["loginCallback"] = (name, token, openid) => {
+      self.loginCallback(name, token, openid);
+    }
+
   },
 
   methods: {
@@ -376,13 +390,38 @@ export default {
       }
     },
 
+    loginCallback(name, token, openid) {
+      // 打开用户名登录层，绑定用户名
+      // 如果openid不为空，则要绑定用户名账号
+      if (openid !== null) {
+        this.userInfo.openid = openid
+        this.showLogin()
+      } else {
+        this.setCookies(name, token)
+      }
+    },
+
     handleSelect(item) {
       window.location.href = "/hospital/" + item.hoscode;
     },
 
     weixinLogin() {
-      this.dialogAtrr.showLoginType = "weixin";
+      this.dialogAtrr.showLoginType = 'weixin'
+
+      weixinApi.getLoginParam().then(response => {
+        let obj = new WxLogin({
+          self_redirect: true,
+          id: 'weixinLogin', // 需要显示的容器id
+          appid: response.data.appid, // 公众号appid wx*******
+          scope: response.data.scope, // 网页默认即可
+          redirect_uri: response.data.redirectUri, // 授权成功后回调的url
+          state: response.data.state, // 可设置为简单的随机数加session用来校验
+          style: 'black', // 提供"black"、"white"可选。二维码的样式
+          href: '' // 外部css文件url，需要https
+        });
+      })
     },
+
 
     usernameLogin() {
       this.dialogAtrr.showLoginType = "username";

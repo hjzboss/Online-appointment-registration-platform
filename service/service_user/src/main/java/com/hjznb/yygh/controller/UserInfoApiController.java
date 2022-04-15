@@ -43,4 +43,6 @@ public class UserInfoApiController {
         userInfoService.regist(loginVo);
         return Result.ok();
     }
+
+
 }

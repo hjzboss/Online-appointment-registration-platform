@@ -17,4 +17,6 @@ public interface UserInfoService extends IService<UserInfo> {
 
     //会员注册
     void regist(LoginVo loginVo);
+
+    UserInfo selectWxInfoOpenId(String openid);
 }

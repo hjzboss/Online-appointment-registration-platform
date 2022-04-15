@@ -15,8 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author hjz
@@ -37,17 +35,33 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
                 StringUtils.isEmpty(password)) {
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
-        //用户名已被使用
-        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username);
-        //获取会员，如果不存在则需要先注册
-        UserInfo userInfo = baseMapper.selectOne(queryWrapper);
-        if (null == userInfo) {
-            throw new YyghException(ResultCodeEnum.USERNAME_ERROR);
+        UserInfo userInfo = null;
+        //微信登录绑定用户名
+        if (!StringUtils.isEmpty(loginVo.getOpenid())) {
+            userInfo = this.selectWxInfoOpenId(loginVo.getOpenid());
+            if (null != userInfo) {
+                userInfo.setUsername(loginVo.getUsername());
+                userInfo.setPassword(MD5.encrypt(password));
+                userInfo.setPhone(loginVo.getPhone());
+                this.updateById(userInfo);
+            } else {
+                throw new YyghException(ResultCodeEnum.DATA_ERROR);
+            }
         }
-        //校验密码
-        if (!userInfo.getPassword().equals(MD5.encrypt(password))) {
-            throw new YyghException(ResultCodeEnum.PASSWORD_ERROR);
+        // 如果为空，则是用户名直接登录
+        if (userInfo == null) {
+            //用户名已被使用
+            QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("username", username);
+            //获取会员，如果不存在则需要先注册
+            userInfo = baseMapper.selectOne(queryWrapper);
+            if (null == userInfo) {
+                throw new YyghException(ResultCodeEnum.USERNAME_ERROR);
+            }
+            //校验密码
+            if (!userInfo.getPassword().equals(MD5.encrypt(password))) {
+                throw new YyghException(ResultCodeEnum.PASSWORD_ERROR);
+            }
         }
         //校验是否被禁用
         if (userInfo.getStatus() == 0) {
@@ -55,12 +69,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         }
         //返回登录信息
         Map<String, Object> map = new HashMap<>();
-        String name = userInfo.getName();
+        String name = userInfo.getNickName();
         if (StringUtils.isEmpty(name)) {
             name = username;
-        }
-        if (StringUtils.isEmpty(name)) {
-            name = userInfo.getUsername();
         }
         map.put("name", name);
         //jwt生成token字符串
@@ -97,6 +108,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         } else {
             throw new YyghException(ResultCodeEnum.USER_EXIST);
         }
+    }
+
+    /**
+     * 根据微信openid获取用户信息
+     *
+     * @param openid 微信openid
+     * @return
+     */
+    @Override
+    public UserInfo selectWxInfoOpenId(String openid) {
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("openid", openid);
+        return baseMapper.selectOne(queryWrapper);
     }
 }
 
