@@ -76,7 +76,6 @@ public class WeixinApiController {
 
             //判断数据库是否存在微信的扫描人信息
             //根据openid判断
-            //TODO: 数据库已存在用户的绑定
             UserInfo userInfo = userInfoService.selectWxInfoOpenId(openid);
             if (userInfo == null) { //数据库不存在微信信息
                 //第三步 拿着openid  和  access_token请求微信地址，得到扫描人信息
@@ -107,14 +106,14 @@ public class WeixinApiController {
                 name = userInfo.getNickName();
             }
             if (StringUtils.isEmpty(name)) {
-                name = userInfo.getUsername();
+                name = userInfo.getPhone();
             }
             map.put("name", name);
 
             //判断userInfo是否有手机号，如果手机号为空，返回openid
             //如果手机号不为空，返回openid值是空字符串
             //前端判断：如果openid不为空，绑定手机号，如果openid为空，不需要绑定手机号
-            if (StringUtils.isEmpty(userInfo.getUsername())) {
+            if (StringUtils.isEmpty(userInfo.getPhone())) {
                 map.put("openid", userInfo.getOpenid());
             } else {
                 map.put("openid", "");

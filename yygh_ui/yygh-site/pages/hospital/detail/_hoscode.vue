@@ -57,7 +57,7 @@
 import '~/assets/css/hospital_personal.css'
 import '~/assets/css/hospital.css'
 
-import hospitalApi from '@/api/hosp'
+import hospitalApi from '@/api/hosp/hosp'
 
 export default {
   data() {

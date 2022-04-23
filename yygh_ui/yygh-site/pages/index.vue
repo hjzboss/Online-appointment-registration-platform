@@ -2,7 +2,7 @@
   <div class="home page-component">
     <el-carousel indicator-position="outside">
       <el-carousel-item v-for="item in 2" :key="item">
-        <img src="~assets/images/web-banner1.png" alt="" />
+        <img src="~assets/images/web-banner1.png" alt=""/>
       </el-carousel-item>
     </el-carousel>
     <!-- 搜索 -->
@@ -20,7 +20,7 @@
             <span
               slot="suffix"
               class="search-btn v-link highlight clickable selected"
-              >搜索
+            >搜索
             </span>
           </el-autocomplete>
         </div>
@@ -36,16 +36,19 @@
               <span class="label">等级：</span>
               <div class="condition-wrapper">
                 <!--医院等级遍历-->
-                <span v-for="(item, index) in hostypeList" :key="index" class="item v-link clickable" @click="hostypeSelect(item.value, index)" :class="hostypeActiveIndex == index ? 'selected' : ''"> 
-                  {{item.name}}
+                <span v-for="(item, index) in hostypeList" :key="index" class="item v-link clickable"
+                      @click="hostypeSelect(item.value, index)" :class="hostypeActiveIndex == index ? 'selected' : ''">
+                  {{ item.name }}
                 </span>
               </div>
             </div>
             <div class="filter-wrapper">
               <span class="label">地区：</span>
               <div class="condition-wrapper">
-                <span v-for="(item,index) in districtList" :key="index" class="item v-link clickable" :class="provinceActiveIndex == index ? 'selected' : ''" @click="districtSelect(item.value, index)"> 
-                  {{item.name}}
+                <span v-for="(item,index) in districtList" :key="index" class="item v-link clickable"
+                      :class="provinceActiveIndex == index ? 'selected' : ''"
+                      @click="districtSelect(item.value, index)">
+                  {{ item.name }}
                 </span>
               </div>
             </div>
@@ -53,26 +56,27 @@
         </div>
         <div class="v-scroll-list hospital-list">
           <!--医院列表遍历-->
-          <div v-for="(item, index) in list" :key="index" class="v-card clickable list-item" @click="show(item.hoscode)">
+          <div v-for="(item, index) in list" :key="index" class="v-card clickable list-item"
+               @click="show(item.hoscode)">
             <div class="">
               <div class="hospital-list-item hos-item" index="0">
                 <div class="wrapper">
-                  <div class="hospital-title">{{item.hosname}}</div>
+                  <div class="hospital-title">{{ item.hosname }}</div>
                   <div class="bottom-container">
                     <div class="icon-wrapper">
                       <span class="iconfont"></span>
-                      {{item.param.hostypeString}}
+                      {{ item.param.hostypeString }}
                     </div>
                     <div class="icon-wrapper">
                       <span class="iconfont"></span>
-                      每天{{item.bookingRule.releaseTime}}放号
+                      每天{{ item.bookingRule.releaseTime }}放号
                     </div>
                   </div>
                 </div>
                 <!--医院图片显示-->
                 <img :src="'data:image/jpeg;base64,'+item.logoData"
-                :alt="item.hosname"
-                class="hospital-img">
+                     :alt="item.hosname"
+                     class="hospital-img">
               </div>
             </div>
           </div>
@@ -115,13 +119,13 @@
             <div class="notice-wrapper">
               <div class="point"></div>
               <span class="notice v-link clickable dark"
-                >关于延长北京大学国际医院放假的通知
+              >关于延长北京大学国际医院放假的通知
               </span>
             </div>
             <div class="notice-wrapper">
               <div class="point"></div>
               <span class="notice v-link clickable dark"
-                >北京中医药大学东方医院部分科室医生门诊医
+              >北京中医药大学东方医院部分科室医生门诊医
               </span>
             </div>
             <div class="notice-wrapper">
@@ -161,7 +165,7 @@
             <div class="notice-wrapper">
               <div class="point"></div>
               <span class="notice v-link clickable dark"
-                >中日友好医院中西医结合心内科门诊停诊公告
+              >中日友好医院中西医结合心内科门诊停诊公告
               </span>
             </div>
           </div>
@@ -171,12 +175,13 @@
   </div>
 </template>
 <script>
-import hospApi from '@/api/hosp'
-import dictApi from '@/api/dict'
+import hospApi from '@/api/hosp/hosp'
+import dictApi from '@/api/cmn/dict'
+
 export default {
   //服务端渲染 ，显示医院列表
-  asyncData({ params, error }) {
-    //调用 
+  asyncData({params, error}) {
+    //调用
     return hospApi.getPageList(1, 10, null)
       .then(response => {
         return {
@@ -212,17 +217,17 @@ export default {
           //hostypelist清空
           this.hostypeList = []
           //向hostypeList添加"全部"值
-          this.hostypeList.push({"name":"全部", "value":""})
+          this.hostypeList.push({"name": "全部", "value": ""})
           //把接口返回数据添加到hostypeList
-          for(var i=0; i<response.data.length; i++) {
+          for (var i = 0; i < response.data.length; i++) {
             this.hostypeList.push(response.data[i])
           }
           //查询地区数据
           dictApi.findByDictCode('Beijing')
             .then(response => {
               this.districtList = []
-              this.districtList.push({"name":"全部 ", "value":""})
-              for(let i in response.data) {
+              this.districtList.push({"name": "全部 ", "value": ""})
+              for (let i in response.data) {
                 this.districtList.push(response.data[i])
               }
             })
@@ -232,7 +237,7 @@ export default {
     getList() {
       hospApi.getPageList(this.page, this.limit, this.searchObj)
         .then(response => {
-          for(let i in response.data.content) {
+          for (let i in response.data.content) {
             this.list.push(response.data.content[i])
           }
           this.page = response.data.totalPages
@@ -258,9 +263,9 @@ export default {
     //在输入框输入值，弹出下拉框，显示相关内容
     querySearchAsync(queryString, cb) {
       this.searchObj = []
-      if(queryString == '') return
+      if (queryString == '') return
       hospApi.getByHosname(queryString).then(response => {
-        for (let i = 0, len = response.data.length; i <len; i++) {
+        for (let i = 0, len = response.data.length; i < len; i++) {
           response.data[i].value = response.data[i].hosname
         }
         cb(response.data)

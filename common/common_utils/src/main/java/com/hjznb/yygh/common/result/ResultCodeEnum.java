@@ -5,10 +5,9 @@ import lombok.Getter;
 /**
  * 统一返回结果状态信息类
  */
-@Getter
+@Getter  //这个是lombok的生成getter方法的注解，注意只生成get方法
 public enum ResultCodeEnum {
-    USER_EXIST(271, "用户已存在"),
-    USERNAME_ERROR(270, "用户未注册"),
+
     SUCCESS(200, "成功"),
     FAIL(201, "失败"),
     PARAM_ERROR(202, "参数不正确"),
@@ -19,10 +18,9 @@ public enum ResultCodeEnum {
     LOGIN_AUTH(208, "未登陆"),
     PERMISSION(209, "没有权限"),
 
-    PASSWORD_ERROR(210, "密码错误"),
-    //    LOGIN_MOBLE_ERROR(211, "账号不正确"),
+    CODE_ERROR(210, "验证码错误"),
     LOGIN_DISABLED_ERROR(212, "改用户已被禁用"),
-    REGISTER_MOBLE_ERROR(213, "用户名已被使用"),
+    REGISTER_MOBLE_ERROR(213, "手机号已被使用"),
     LOGIN_AURH(214, "需要登录"),
     LOGIN_ACL(215, "没有权限"),
 
@@ -44,6 +42,7 @@ public enum ResultCodeEnum {
     HOSPITAL_OPEN(310, "医院未开通，暂时不能访问"),
     HOSPITAL_LOCK(320, "医院被锁定，暂时不能访问"),
     ;
+    //上面的每个枚举类实例都必须带上code和message的信息，且必须写在最上面
 
     private final Integer code;
     private final String message;
@@ -52,4 +51,4 @@ public enum ResultCodeEnum {
         this.code = code;
         this.message = message;
     }
-}
+    }

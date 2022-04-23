@@ -1,8 +1,8 @@
 package com.hjznb.yygh.model.user;
 
+import com.hjznb.yygh.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.hjznb.yygh.model.base.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.Data;
  * UserInfo
  * </p>
  *
- * @author qy
+ * @author hjz
  */
 @Data
 @ApiModel(description = "UserInfo")
@@ -25,25 +25,17 @@ public class UserInfo extends BaseEntity {
     @TableField("openid")
     private String openid;
 
+    @ApiModelProperty(value = "昵称")
+    @TableField("nick_name")
+    private String nickName;
+
     @ApiModelProperty(value = "手机号")
     @TableField("phone")
     private String phone;
 
-    @ApiModelProperty(value = "用户名")
-    @TableField("username")
-    private String username;
-
-    @ApiModelProperty(value = "密码")
-    @TableField("password")
-    private String password;
-
     @ApiModelProperty(value = "用户姓名")
     @TableField("name")
     private String name;
-
-    @ApiModelProperty(value = "用户昵称")
-    @TableField("nickname")
-    private String nickName;
 
     @ApiModelProperty(value = "证件类型")
     @TableField("certificates_type")

@@ -79,10 +79,10 @@
             </div>
             <div class="line">
               <span class="label">退号时间：</span>
-              <span v-if="bookingRule.quitDay == -1"
+              <span v-if="bookingRule.quitDay === -1"
               >就诊前一工作日{{ bookingRule.quitTime }}前取消</span
               >
-              <span v-if="bookingRule.quitDay == 0"
+              <span v-if="bookingRule.quitDay === 0"
               >就诊前当天{{ bookingRule.quitTime }}前取消</span
               >
             </div>
@@ -108,7 +108,7 @@
                       class="sub-item"
                       v-for="(item, index) in departmentVoList"
                       :key="item.id"
-                      :class="index == activeIndex ? 'selected' : ''"
+                      :class="index === activeIndex ? 'selected' : ''"
                       @click="move(index, item.depcode)"
                     >
                       {{ item.depname }}
@@ -134,7 +134,7 @@
             <div
               v-for="(item, index) in departmentVoList"
               :key="item.id"
-              :class="index == 0 ? 'selected' : ''"
+              :class="index === 0 ? 'selected' : ''"
               class="sub-dept-wrapper"
               :id="item.depcode"
             >
@@ -166,7 +166,7 @@
 import "~/assets/css/hospital_personal.css";
 import "~/assets/css/hospital.css";
 import cookie from 'js-cookie'
-import hospitalApi from "@/api/hosp";
+import hospitalApi from "@/api/hosp/hosp";
 
 export default {
   data() {
