@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import dict from '@/api/dict'
+import dict from '@/api/cmn/dict'
 export default {
   data() {
     return {

@@ -20,7 +20,7 @@ export default {
 
   saveUserAuah(userAuah) {
     return request({
-      url: `${api_name}/auth/userAuah`,
+      url: `${api_name}/auth/userAuth`,
       method: 'post',
       data: userAuah
     })

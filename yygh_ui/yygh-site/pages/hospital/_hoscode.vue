@@ -163,10 +163,11 @@
 </template>
 
 <script>
-import "~/assets/css/hospital_personal.css";
-import "~/assets/css/hospital.css";
+import "~/assets/css/hospital_personal.css"
+import "~/assets/css/hospital.css"
+import userInfoApi from '@/api/user/userInfo'
 import cookie from 'js-cookie'
-import hospitalApi from "@/api/hosp/hosp";
+import hospitalApi from "@/api/hosp/hosp"
 
 export default {
   data() {
@@ -212,8 +213,17 @@ export default {
         loginEvent.$emit('loginDialogEvent')
         return
       }
+      //判断认证
+      userInfoApi.getUserInfo().then(response => {
+        let authStatus = response.data.authStatus
+        // 状态为2认证通过
+        if (!authStatus || authStatus !== 2) {
+          window.location.href = '/user'
+          return
+        }
+      })
       window.location.href = '/hospital/schedule?hoscode=' + this.hospital.hoscode + "&depcode=" + depcode
     }
-  },
-};
+  }
+}
 </script>

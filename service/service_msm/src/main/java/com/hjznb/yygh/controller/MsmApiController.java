@@ -3,6 +3,8 @@ package com.hjznb.yygh.controller;
 import com.hjznb.yygh.common.result.Result;
 import com.hjznb.yygh.service.MsmService;
 import com.hjznb.yygh.utils.RandomUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.TimeUnit;
 
+@Api(tags = "短信发送")
 @RestController
 @RequestMapping("/api/sms")
 public class MsmApiController {
@@ -26,6 +29,7 @@ public class MsmApiController {
     }
 
     // 发送手机验证码
+    @ApiOperation(value = "发送手机验证码")
     @GetMapping("send/{phone}")
     public Result sendCode(@PathVariable String phone) {
 

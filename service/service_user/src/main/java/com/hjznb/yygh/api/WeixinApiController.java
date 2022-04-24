@@ -10,6 +10,7 @@ import com.hjznb.yygh.service.UserInfoService;
 import com.hjznb.yygh.utils.ConstantPropertiesUtil;
 import com.hjznb.yygh.utils.HttpClientUtils;
 import com.sun.deploy.net.URLEncoder;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,6 +30,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2022/4/15 11:03
  */
+@Api(tags = "微信登录回调接口")
 @Controller
 @RequestMapping("/api/ucenter/wx")
 public class WeixinApiController {
@@ -44,10 +46,11 @@ public class WeixinApiController {
     /**
      * 微信登录回调
      *
-     * @param code
+     * @param code  临时票据
      * @param state
      * @return
      */
+    @ApiOperation(value = "微信登录回调")
     @GetMapping("callback")
     public String callback(String code, String state) {
         //第一步 获取临时票据 code

@@ -79,7 +79,7 @@ public class HospitalSetController {
 
     //4 添加医院设置
     @ApiOperation(value = "添加医院设置")
-    @PostMapping("saveHosp")
+    @PostMapping("saveHospitalSet")
     public Result saveHospitalSet(@RequestBody HospitalSet hospitalSet) {
         //设置状态1能使用 0不能使用
         hospitalSet.setStatus(1);
@@ -125,7 +125,7 @@ public class HospitalSetController {
 
     //8 医院设置锁定和解锁
     @ApiOperation(value = "医院设置锁定和解锁")
-    @PutMapping ("lockHospitalSet/{id}/{status}")
+    @PutMapping("lockHospitalSet/{id}/{status}")
     public Result lockHospitalSet(@PathVariable Long id,
                                   @PathVariable Integer status) {
         //根据id查询医院设置信息

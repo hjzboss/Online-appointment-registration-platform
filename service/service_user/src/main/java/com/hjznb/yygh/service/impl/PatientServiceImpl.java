@@ -31,12 +31,9 @@ public class PatientServiceImpl extends
 
         List<Patient> patientList = baseMapper.selectList(wrapper);
 
-
         //通过远程调用，得到编码对应具体内容，查询数据字典表内容
-        patientList.stream().forEach(item -> {
-            //其他参数封装
-            this.packPatient(item);
-        });
+        //其他参数封装
+        patientList.forEach(this::packPatient);
         return patientList;
     }
 
@@ -48,7 +45,7 @@ public class PatientServiceImpl extends
     //Patient对象里面其他参数封装
     private Patient packPatient(Patient patient) {
 
-        //根据证件类型编码，获取证件类型具体指
+        //根据证件类型编码，获取证件类型具体值
         String certificatesTypeString =
                 dictFeignClient.getName(DictEnum.CERTIFICATES_TYPE.getDictCode(), patient.getCertificatesType());//联系人证件
         //联系人证件类型

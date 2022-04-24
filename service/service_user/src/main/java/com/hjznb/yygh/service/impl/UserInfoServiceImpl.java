@@ -115,8 +115,7 @@ public class UserInfoServiceImpl extends
     public UserInfo selectWxInfoOpenId(String openid) {
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("openid", openid);
-        UserInfo userInfo = baseMapper.selectOne(queryWrapper);
-        return userInfo;
+        return baseMapper.selectOne(queryWrapper);
     }
 
     //用户认证
@@ -165,16 +164,14 @@ public class UserInfoServiceImpl extends
         //调用mapper的方法
         IPage<UserInfo> pages = baseMapper.selectPage(pageParam, wrapper);
         //编号变成对应值封装
-        pages.getRecords().stream().forEach(item -> {
-            this.packageUserInfo(item);
-        });
+        pages.getRecords().forEach(this::packageUserInfo);
         return pages;
     }
 
     //用户锁定
     @Override
     public void lock(Long userId, Integer status) {
-        if (status.intValue() == 0 || status.intValue() == 1) {
+        if (status == 0 || status == 1) {
             UserInfo userInfo = baseMapper.selectById(userId);
             userInfo.setStatus(status);
             baseMapper.updateById(userInfo);
@@ -197,7 +194,7 @@ public class UserInfoServiceImpl extends
     //认证审批  2通过  -1不通过
     @Override
     public void approval(Long userId, Integer authStatus) {
-        if (authStatus.intValue() == 2 || authStatus.intValue() == -1) {
+        if (authStatus == 2 || authStatus == -1) {
             UserInfo userInfo = baseMapper.selectById(userId);
             userInfo.setAuthStatus(authStatus);
             baseMapper.updateById(userInfo);
@@ -210,7 +207,7 @@ public class UserInfoServiceImpl extends
         //处理认证状态编码
         userInfo.getParam().put("authStatusString", AuthStatusEnum.getStatusNameByStatus(userInfo.getAuthStatus()));
         //处理用户状态 0  1
-        String statusString = userInfo.getStatus().intValue() == 0 ? "锁定" : "正常";
+        String statusString = userInfo.getStatus() == 0 ? "锁定" : "正常";
         userInfo.getParam().put("statusString", statusString);
         return userInfo;
     }

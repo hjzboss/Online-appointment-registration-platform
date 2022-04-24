@@ -9,7 +9,6 @@
     "start": "npm run dev",
     "build": "node build/build.js",
     "build:report": "npm_config_report=true npm run build",
-    "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
@@ -37,10 +36,6 @@
     "chalk": "2.4.1",
     "copy-webpack-plugin": "4.5.2",
     "css-loader": "1.0.0",
-    "eslint": "4.19.1",
-    "eslint-friendly-formatter": "4.0.1",
-    "eslint-loader": "2.0.0",
-    "eslint-plugin-vue": "4.7.1",
     "eventsource-polyfill": "0.9.6",
     "file-loader": "1.1.11",
     "friendly-errors-webpack-plugin": "1.7.0",
