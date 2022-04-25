@@ -36,10 +36,10 @@
           <el-button type="danger" size="mini"
                      icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除
           </el-button>
-          <el-button v-if="scope.row.status==1" type="primary" size="mini"
+          <el-button v-if="scope.row.status===1" type="primary" size="mini"
                      icon="el-icon-delete" @click="lockHostSet(scope.row.id,0)">锁定
           </el-button>
-          <el-button v-if="scope.row.status==0" type="danger" size="mini"
+          <el-button v-if="scope.row.status===0" type="danger" size="mini"
                      icon="el-icon-delete" @click="lockHostSet(scope.row.id,1)">取消锁定
           </el-button>
           <router-link :to="'/hospSet/hospitalSet/edit/'+scope.row.id">

@@ -190,6 +190,7 @@ export default {
       // 打开手机登录层，绑定手机号，改逻辑与手机登录一致
       if (openid !== null) {
         this.userInfo.openid = openid
+
         this.showLogin()
       } else {
         this.setCookies(name, token)
@@ -201,7 +202,7 @@ export default {
       // 判断是获取验证码还是登录
       if (this.dialogAtrr.loginBtn === '获取验证码') {
         this.userInfo.phone = this.dialogAtrr.inputValue
-
+        this.$message.warning('请绑定手机号')
         // 获取验证码
         this.getCodeFun()
       } else {
@@ -263,7 +264,7 @@ export default {
       // 初始化验证码相关属性
       this.dialogAtrr.inputValue = ''
       this.dialogAtrr.placeholder = '请输入验证码'
-      this.dialogAtrr.maxlength = 6
+      this.dialogAtrr.maxlength = 4
       this.dialogAtrr.loginBtn = '马上登录'
 
       // 控制重复发送
