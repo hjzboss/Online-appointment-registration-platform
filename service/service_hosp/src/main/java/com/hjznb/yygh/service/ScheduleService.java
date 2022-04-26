@@ -25,4 +25,8 @@ public interface ScheduleService {
     Map<String, Object> getRuleSchedule(long page, long limit, String hoscode, String depcode);
     //根据医院编号、科室编号和工作日期，查询排班详细信息
     List<Schedule> getDetailSchedule(String hoscode, String depcode, String workDate);
+    //获取排班可预约日期数据
+    Map<String, Object> getBookingScheduleRule(int page, int limit, String hoscode, String depcode);
+    //根据id获取排班
+    Schedule getById(String id);
 }
