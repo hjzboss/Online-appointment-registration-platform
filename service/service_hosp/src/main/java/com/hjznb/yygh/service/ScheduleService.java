@@ -2,6 +2,7 @@ package com.hjznb.yygh.service;
 
 import com.hjznb.yygh.model.hosp.Department;
 import com.hjznb.yygh.model.hosp.Schedule;
+import com.hjznb.yygh.vo.hosp.ScheduleOrderVo;
 import com.hjznb.yygh.vo.hosp.ScheduleQueryVo;
 import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,4 +30,7 @@ public interface ScheduleService {
     Map<String, Object> getBookingScheduleRule(int page, int limit, String hoscode, String depcode);
     //根据id获取排班
     Schedule getById(String id);
+    //根据排班id获取预约下单数据
+    ScheduleOrderVo getScheduleOrderVo(String scheduleId);
+
 }

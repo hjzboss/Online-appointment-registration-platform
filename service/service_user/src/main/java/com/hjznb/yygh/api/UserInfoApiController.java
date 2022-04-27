@@ -47,6 +47,7 @@ public class UserInfoApiController {
     @GetMapping("auth/getUserInfo")
     public Result getUserInfo(HttpServletRequest request) {
         Long userId = AuthContextHolder.getUserId(request);
+        // System.out.println(userId);
         UserInfo userInfo = userInfoService.getById(userId);
         return Result.ok(userInfo);
     }

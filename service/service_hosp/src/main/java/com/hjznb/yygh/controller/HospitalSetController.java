@@ -147,4 +147,6 @@ public class HospitalSetController {
         //TODO 发送短信
         return Result.ok();
     }
+
+
 }

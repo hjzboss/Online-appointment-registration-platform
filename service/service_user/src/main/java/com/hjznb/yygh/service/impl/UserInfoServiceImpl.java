@@ -58,11 +58,25 @@ public class UserInfoServiceImpl extends
 
         //如果是微信扫码登录，则Openid有值，则绑定手机号码，执行后userInfo就!=null了不会走68行的手机号登录
         UserInfo userInfo = null;
-        if (!StringUtils.isEmpty(loginVo.getOpenid())) {
-            userInfo = this.selectWxInfoOpenId(loginVo.getOpenid());
+        UserInfo userInfoOld = null;
+        String openid = loginVo.getOpenid();
+        if (!StringUtils.isEmpty(openid)) {
+            userInfo = this.selectWxInfoOpenId(openid);
             if (null != userInfo) {
-                userInfo.setPhone(loginVo.getPhone());
-                this.updateById(userInfo);
+                QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
+                wrapper.eq("phone", phone);
+                userInfoOld = baseMapper.selectOne(wrapper);
+                // 如果手机已注册，直接将openid和nickname赋值给旧数据
+                if (null != userInfoOld) {
+                    userInfoOld.setOpenid(openid);
+                    userInfoOld.setNickName(userInfo.getNickName());
+                    this.updateById(userInfoOld);
+                    this.removeById(userInfo.getId());
+                    userInfo = userInfoOld;
+                } else {
+                    userInfo.setPhone(loginVo.getPhone());
+                    this.updateById(userInfo);
+                }
             } else {
                 throw new YyghException(ResultCodeEnum.DATA_ERROR);
             }
