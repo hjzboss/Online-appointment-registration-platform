@@ -11,6 +11,7 @@
     <modules>
         <module>common_utils</module>
         <module>service_utils</module>
+        <module>rabbitmq_utils</module>
     </modules>
     <artifactId>common</artifactId>
     <packaging>pom</packaging>

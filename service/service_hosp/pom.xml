@@ -21,6 +21,11 @@
             <artifactId>service-cmn-client</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.hjznb.yygh</groupId>
+            <artifactId>rabbitmq_utils</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <packaging>jar</packaging>
     <name>service-hosp</name>

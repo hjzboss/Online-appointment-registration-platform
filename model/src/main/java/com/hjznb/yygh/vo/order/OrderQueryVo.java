@@ -11,30 +11,30 @@ import java.util.Date;
 public class OrderQueryVo {
 
 
-	@ApiModelProperty(value = "会员id")
-	private Long userId;
-	
-	@ApiModelProperty(value = "订单交易号")
-	private String outTradeNo;
+    @ApiModelProperty(value = "会员id")
+    private Long userId;
 
-	@ApiModelProperty(value = "就诊人id")
-	private Long patientId;
+    @ApiModelProperty(value = "订单交易号")
+    private String outTradeNo;
 
-	@ApiModelProperty(value = "就诊人")
-	private String patientName;
+    @ApiModelProperty(value = "就诊人id")
+    private Long patientId;
 
-	@ApiModelProperty(value = "医院名称")
-	private String keyword;
+    @ApiModelProperty(value = "就诊人")
+    private String patientName;
 
-	@ApiModelProperty(value = "订单状态")
-	private String orderStatus;
+    @ApiModelProperty(value = "医院名称")
+    private String keyword;
 
-	@ApiModelProperty(value = "安排日期")
-	private String reserveDate;
+    @ApiModelProperty(value = "订单状态")
+    private String orderStatus;
 
-	@ApiModelProperty(value = "创建时间")
-	private String createTimeBegin;
-	private String createTimeEnd;
+    @ApiModelProperty(value = "安排日期")
+    private String reserveDate;
+
+    @ApiModelProperty(value = "创建时间")
+    private String createTimeBegin;
+    private String createTimeEnd;
 
 }
 

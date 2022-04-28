@@ -54,7 +54,7 @@ public class PatientApiController {
 
     //修改就诊人
     @ApiOperation(value = "修改就诊人")
-    @PostMapping("auth/update")
+    @PutMapping("auth/update")
     public Result updatePatient(@RequestBody Patient patient) {
         patientService.updateById(patient);
         return Result.ok();

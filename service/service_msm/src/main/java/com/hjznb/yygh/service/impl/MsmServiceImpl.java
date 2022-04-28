@@ -5,7 +5,9 @@ import com.hjznb.yygh.common.exception.YyghException;
 import com.hjznb.yygh.common.result.ResultCodeEnum;
 import com.hjznb.yygh.service.MsmService;
 import com.hjznb.yygh.utils.ConstantPropertiesUtils;
+import com.hjznb.yygh.vo.msm.MsmVo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -77,4 +79,14 @@ public class MsmServiceImpl implements MsmService {
         }
         return false;
     }
+
+    @Override
+    public boolean send(MsmVo msmVo) {
+        if (!StringUtils.isEmpty(msmVo.getPhone())) {
+            String code = (String) msmVo.getParam().get("code");
+            return this.send(msmVo.getPhone(), code);
+        }
+        return false;
+    }
+
 }

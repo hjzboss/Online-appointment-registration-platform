@@ -18,5 +18,5 @@ public class MsmVo {
     private String templateCode;
 
     @ApiModelProperty(value = "短信模板参数")
-    private Map<String,Object> param;
+    private Map<String, Object> param;
 }
