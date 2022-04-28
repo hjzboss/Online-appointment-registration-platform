@@ -21,17 +21,13 @@ import java.io.IOException;
 public class HospitalReceiver {
 
     private final RabbitService rabbitService;
-    private ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
 
-    public HospitalReceiver(RabbitService rabbitService) {
+    public HospitalReceiver(RabbitService rabbitService, ScheduleService scheduleService) {
         this.rabbitService = rabbitService;
-    }
-
-    @Autowired
-    public HospitalReceiver(ScheduleService scheduleService, RabbitService rabbitService) {
         this.scheduleService = scheduleService;
-        this.rabbitService = rabbitService;
     }
+
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = MqConst.QUEUE_ORDER, durable = "true"),
