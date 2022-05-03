@@ -16,11 +16,14 @@ import java.util.Map;
 @RestController
 public class HospitalController {
 
-    @Autowired
-    private HospitalService hospitalService;
+    private final HospitalService hospitalService;
 
-    @Autowired
-    private ApiService apiService;
+    private final ApiService apiService;
+
+    public HospitalController(HospitalService hospitalService, ApiService apiService) {
+        this.hospitalService = hospitalService;
+        this.apiService = apiService;
+    }
 
     /**
      * 预约下单

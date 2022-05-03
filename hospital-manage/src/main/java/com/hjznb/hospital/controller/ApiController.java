@@ -22,11 +22,14 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping
 public class ApiController extends BaseController {
 
-    @Autowired
-    private ApiService apiService;
+    private final ApiService apiService;
 
-    @Autowired
-    private HospitalSetMapper hospitalSetMapper;
+    private final HospitalSetMapper hospitalSetMapper;
+
+    public ApiController(ApiService apiService, HospitalSetMapper hospitalSetMapper) {
+        this.apiService = apiService;
+        this.hospitalSetMapper = hospitalSetMapper;
+    }
 
     @RequestMapping("/hospitalSet/index")
     public String getHospitalSet(ModelMap model, RedirectAttributes redirectAttributes) {

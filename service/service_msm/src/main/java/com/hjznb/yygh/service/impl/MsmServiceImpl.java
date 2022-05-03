@@ -1,5 +1,6 @@
 package com.hjznb.yygh.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.hjznb.yygh.common.exception.YyghException;
 import com.hjznb.yygh.common.result.ResultCodeEnum;
@@ -83,8 +84,11 @@ public class MsmServiceImpl implements MsmService {
     @Override
     public boolean send(MsmVo msmVo) {
         if (!StringUtils.isEmpty(msmVo.getPhone())) {
-            String code = (String) msmVo.getParam().get("code");
-            return this.send(msmVo.getPhone(), code);
+            String fetchAddress = (String) msmVo.getParam().get("fetchAddress");
+            String fetchTime = (String) msmVo.getParam().get("fetchTime");
+            String name = (String) msmVo.getParam().get("name");
+            String s = name + "您好，请于" + fetchTime + "在" + fetchAddress + "取号";
+            return this.send(msmVo.getPhone(), s);
         }
         return false;
     }

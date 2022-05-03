@@ -23,11 +23,14 @@ import java.util.Map;
 @Slf4j
 public class HospitalServiceImpl implements HospitalService {
 
-    @Autowired
-    private ScheduleMapper hospitalMapper;
+    private final ScheduleMapper hospitalMapper;
 
-    @Autowired
-    private OrderInfoMapper orderInfoMapper;
+    private final OrderInfoMapper orderInfoMapper;
+
+    public HospitalServiceImpl(ScheduleMapper hospitalMapper, OrderInfoMapper orderInfoMapper) {
+        this.hospitalMapper = hospitalMapper;
+        this.orderInfoMapper = orderInfoMapper;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -39,7 +42,7 @@ public class HospitalServiceImpl implements HospitalService {
         String reserveDate = (String) paramMap.get("reserveDate");
         String reserveTime = (String) paramMap.get("reserveTime");
         String amount = (String) paramMap.get("amount");
-
+        //todo: 可能有问题，没有此id，传来的id值是字符串（为啥能查出来数据？？？？）
         Schedule schedule = this.getSchedule(hosScheduleId);
         if (null == schedule) {
             throw new YyghException(ResultCodeEnum.DATA_ERROR);
@@ -58,15 +61,17 @@ public class HospitalServiceImpl implements HospitalService {
         Long patientId = this.savePatient(patient);
 
         Map<String, Object> resultMap = new HashMap<>();
-        int availableNumber = schedule.getAvailableNumber() - 1;
+        //int availableNumber = schedule.getAvailableNumber() - 1;
+        int availableNumber = schedule.getAvailableNumber();
         if (availableNumber > 0) {
+            availableNumber--;
             schedule.setAvailableNumber(availableNumber);
             hospitalMapper.updateById(schedule);
 
             //记录预约记录
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setPatientId(patientId);
-            orderInfo.setScheduleId(Long.parseLong(hosScheduleId));
+            orderInfo.setScheduleId(hosScheduleId);
             int number = schedule.getReservedNumber() - schedule.getAvailableNumber();
             orderInfo.setNumber(number);
             orderInfo.setAmount(new BigDecimal(amount));

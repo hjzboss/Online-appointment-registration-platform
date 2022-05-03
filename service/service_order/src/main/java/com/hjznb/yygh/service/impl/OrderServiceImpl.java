@@ -64,11 +64,11 @@ public class OrderServiceImpl extends
         if (null == scheduleOrderVo) {
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
-        //当前时间不可以预约
-        if (new DateTime(scheduleOrderVo.getStartTime()).isAfterNow()
-                || new DateTime(scheduleOrderVo.getEndTime()).isBeforeNow()) {
-            throw new YyghException(ResultCodeEnum.TIME_NO);
-        }
+        //todo:当前时间不可以预约
+//        if (new DateTime(scheduleOrderVo.getStartTime()).isAfterNow()
+//                || new DateTime(scheduleOrderVo.getEndTime()).isBeforeNow()) {
+//            throw new YyghException(ResultCodeEnum.TIME_NO);
+//        }
         //获取医院签名和url
         SignInfoVo signInfoVo = hospitalFeignClient.getSignInfoVo(scheduleOrderVo.getHoscode());
         if (null == scheduleOrderVo) {
@@ -82,7 +82,6 @@ public class OrderServiceImpl extends
         // 订单交易号，保存订单
         String outTradeNo = System.currentTimeMillis() + "" + new Random().nextInt(100);
         orderInfo.setOutTradeNo(outTradeNo);
-        orderInfo.setScheduleId(scheduleId);
         orderInfo.setUserId(patient.getUserId());
         orderInfo.setPatientId(patientId);
         orderInfo.setPatientName(patient.getName());
@@ -93,7 +92,7 @@ public class OrderServiceImpl extends
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("hoscode", orderInfo.getHoscode());
         paramMap.put("depcode", orderInfo.getDepcode());
-        paramMap.put("hosScheduleId", orderInfo.getScheduleId());
+        paramMap.put("hosScheduleId", orderInfo.getHosScheduleId());
         paramMap.put("reserveDate", new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd"));
         paramMap.put("reserveTime", orderInfo.getReserveTime());
         paramMap.put("amount", orderInfo.getAmount());
@@ -116,13 +115,14 @@ public class OrderServiceImpl extends
         paramMap.put("timestamp", HttpRequestHelper.getTimestamp());
         String sign = HttpRequestHelper.getSign(paramMap, signInfoVo.getSignKey());
         paramMap.put("sign", sign);
-        //todo: 此处访问接口出现问题
+        //todo: 返回的result为空
         JSONObject result = HttpRequestHelper.sendRequest(paramMap, signInfoVo.getApiUrl() + "/order/submitOrder");
+        System.out.println(result);
         //预约成功后要更新预约数和短信提醒预约成功
         if (result.getInteger("code") == 200) {
             JSONObject jsonObject = result.getJSONObject("data");
             //预约记录唯一标识（医院预约记录主键）
-            
+
             String hosRecordId = jsonObject.getString("hosRecordId");
             //预约序号
             Integer number = jsonObject.getInteger("number");
@@ -143,24 +143,26 @@ public class OrderServiceImpl extends
             Integer availableNumber = jsonObject.getInteger("availableNumber");
 
             //发送mq信息更新号源和短信通知
-            //发送mq信息更新号源
+            //发送mq信息更新号源（发给hosp模块更新医院排班的数据）
             OrderMqVo orderMqVo = new OrderMqVo();
             orderMqVo.setScheduleId(scheduleId);
             orderMqVo.setReservedNumber(reservedNumber);
             orderMqVo.setAvailableNumber(availableNumber);
-            //短信提示
+            //短信提示（用于hosp模块接受到消息后更新数据后向用户发送预约成功的短信）
             MsmVo msmVo = new MsmVo();
             msmVo.setPhone(orderInfo.getPatientPhone());
-            msmVo.setTemplateCode("SMS_194640721");
             String reserveDate =
                     new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd")
                             + (orderInfo.getReserveTime() == 0 ? "上午" : "下午");
             Map<String, Object> param = new HashMap<String, Object>() {{
-                put("title", orderInfo.getHosname() + "|" + orderInfo.getDepname() + "|" + orderInfo.getTitle());
-                put("amount", orderInfo.getAmount());
-                put("reserveDate", reserveDate);
-                put("name", orderInfo.getPatientName());
-                put("quitTime", new DateTime(orderInfo.getQuitTime()).toString("yyyy-MM-dd HH:mm"));
+//                put("title", orderInfo.getHosname() + "|" + orderInfo.getDepname() + "|" + orderInfo.getTitle());
+//                put("amount", orderInfo.getAmount());
+//                put("reserveDate", reserveDate);
+//                put("name", orderInfo.getPatientName());
+//                put("quitTime", new DateTime(orderInfo.getQuitTime()).toString("yyyy-MM-dd HH:mm"));
+                put("fetchTime", fetchTime);
+                put("fetchAddress", fetchAddress);
+                put("name", patient.getName());
             }};
             msmVo.setParam(param);
 

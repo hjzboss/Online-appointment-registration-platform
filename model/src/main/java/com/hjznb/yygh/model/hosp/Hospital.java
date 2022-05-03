@@ -12,8 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * <p>
  * Hospital
  * </p>
- *
- * @author qy
  */
 @Data
 @ApiModel(description = "Hospital")
