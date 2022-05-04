@@ -16,6 +16,7 @@ import com.hjznb.yygh.mapper.OrderInfoMapper;
 import com.hjznb.yygh.model.order.OrderInfo;
 import com.hjznb.yygh.model.user.Patient;
 import com.hjznb.yygh.service.OrderService;
+import com.hjznb.yygh.service.WeixinService;
 import com.hjznb.yygh.user.client.PatientFeignClient;
 import com.hjznb.yygh.vo.hosp.ScheduleOrderVo;
 import com.hjznb.yygh.vo.msm.MsmVo;
@@ -24,6 +25,7 @@ import com.hjznb.yygh.vo.order.OrderQueryVo;
 import com.hjznb.yygh.vo.order.SignInfoVo;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -44,12 +46,13 @@ public class OrderServiceImpl extends
     private final PatientFeignClient patientFeignClient;
     private final HospitalFeignClient hospitalFeignClient;
     private final RabbitService rabbitService;
+    private final WeixinService weixinService;
 
-
-    public OrderServiceImpl(PatientFeignClient patientFeignClient, HospitalFeignClient hospitalFeignClient, RabbitService rabbitService) {
+    public OrderServiceImpl(PatientFeignClient patientFeignClient, HospitalFeignClient hospitalFeignClient, RabbitService rabbitService, WeixinService weixinService) {
         this.patientFeignClient = patientFeignClient;
         this.hospitalFeignClient = hospitalFeignClient;
         this.rabbitService = rabbitService;
+        this.weixinService = weixinService;
     }
 
     //保存订单
@@ -115,7 +118,6 @@ public class OrderServiceImpl extends
         paramMap.put("timestamp", HttpRequestHelper.getTimestamp());
         String sign = HttpRequestHelper.getSign(paramMap, signInfoVo.getSignKey());
         paramMap.put("sign", sign);
-        //todo: 返回的result为空
         JSONObject result = HttpRequestHelper.sendRequest(paramMap, signInfoVo.getApiUrl() + "/order/submitOrder");
         System.out.println(result);
         //预约成功后要更新预约数和短信提醒预约成功
@@ -160,6 +162,7 @@ public class OrderServiceImpl extends
 //                put("reserveDate", reserveDate);
 //                put("name", orderInfo.getPatientName());
 //                put("quitTime", new DateTime(orderInfo.getQuitTime()).toString("yyyy-MM-dd HH:mm"));
+                put("hosname", orderInfo.getHosname());
                 put("fetchTime", fetchTime);
                 put("fetchAddress", fetchAddress);
                 put("name", patient.getName());
@@ -254,6 +257,63 @@ public class OrderServiceImpl extends
         }
     }
 
+    //取消预约
+    @Override
+    public Boolean cancelOrder(Long orderId) {
+        //获取订单信息
+        OrderInfo orderInfo = baseMapper.selectById(orderId);
+        //判断是否取消
+        DateTime quitTime = new DateTime(orderInfo.getQuitTime());
+        if (quitTime.isBeforeNow()) {
+            throw new YyghException(ResultCodeEnum.CANCEL_ORDER_NO);
+        }
+        //调用医院接口实现预约取消
+        SignInfoVo signInfoVo = hospitalFeignClient.getSignInfoVo(orderInfo.getHoscode());
+        if (null == signInfoVo) {
+            throw new YyghException(ResultCodeEnum.PARAM_ERROR);
+        }
+        Map<String, Object> reqMap = new HashMap<>();
+        reqMap.put("hoscode", orderInfo.getHoscode());
+        reqMap.put("hosRecordId", orderInfo.getHosRecordId());
+        reqMap.put("timestamp", HttpRequestHelper.getTimestamp());
+        String sign = HttpRequestHelper.getSign(reqMap, signInfoVo.getSignKey());
+        reqMap.put("sign", sign);
+
+        JSONObject result = HttpRequestHelper.sendRequest(reqMap,
+                signInfoVo.getApiUrl() + "/order/updateCancelStatus");
+        //根据医院接口返回数据
+        if (result.getInteger("code") != 200) {
+            throw new YyghException(result.getString("message"), ResultCodeEnum.FAIL.getCode());
+        } else {
+            //判断当前订单是否可以取消
+            if (orderInfo.getOrderStatus().intValue() == OrderStatusEnum.PAID.getStatus().intValue()) {
+                Boolean isRefund = weixinService.refund(orderId);
+                if (!isRefund) {
+                    throw new YyghException(ResultCodeEnum.CANCEL_ORDER_FAIL);
+                }
+                //更新订单状态
+                orderInfo.setOrderStatus(OrderStatusEnum.CANCLE.getStatus());
+                baseMapper.updateById(orderInfo);
+
+                //发送mq更新预约数量
+                OrderMqVo orderMqVo = new OrderMqVo();
+                orderMqVo.setScheduleId(orderInfo.getHosScheduleId());
+                //短信提示
+                MsmVo msmVo = new MsmVo();
+                msmVo.setPhone(orderInfo.getPatientPhone());
+                String reserveDate = new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd") + (orderInfo.getReserveTime() == 0 ? "上午" : "下午");
+                Map<String, Object> param = new HashMap<String, Object>() {{
+                    put("title", orderInfo.getHosname() + "|" + orderInfo.getDepname() + "|" + orderInfo.getTitle());
+                    put("reserveDate", reserveDate);
+                    put("name", orderInfo.getPatientName());
+                }};
+                msmVo.setParam(param);
+                orderMqVo.setMsmVo(msmVo);
+                rabbitService.sendMessage(MqConst.EXCHANGE_DIRECT_ORDER, MqConst.ROUTING_ORDER, orderMqVo);
+            }
+        }
+        return true;
+    }
 
     private void packOrderInfo(OrderInfo orderInfo) {
         orderInfo.getParam().put("orderStatusString", OrderStatusEnum.getStatusNameByStatus(orderInfo.getOrderStatus()));

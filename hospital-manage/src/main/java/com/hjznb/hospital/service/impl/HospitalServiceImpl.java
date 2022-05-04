@@ -42,7 +42,6 @@ public class HospitalServiceImpl implements HospitalService {
         String reserveDate = (String) paramMap.get("reserveDate");
         String reserveTime = (String) paramMap.get("reserveTime");
         String amount = (String) paramMap.get("amount");
-        //todo: 可能有问题，没有此id，传来的id值是字符串（为啥能查出来数据？？？？）
         Schedule schedule = this.getSchedule(hosScheduleId);
         if (null == schedule) {
             throw new YyghException(ResultCodeEnum.DATA_ERROR);
@@ -89,7 +88,7 @@ public class HospitalServiceImpl implements HospitalService {
             //预约号序
             resultMap.put("number", number);
             //取号时间
-            resultMap.put("fetchTime", reserveDate + "09:00前");
+            resultMap.put("fetchTime", reserveDate + " 09:00前");
             //取号地址
             resultMap.put("fetchAddress", "一层114窗口");
             //排班可预约数
@@ -99,6 +98,7 @@ public class HospitalServiceImpl implements HospitalService {
         } else {
             throw new YyghException(ResultCodeEnum.DATA_ERROR);
         }
+        System.out.println(resultMap);
         return resultMap;
     }
 

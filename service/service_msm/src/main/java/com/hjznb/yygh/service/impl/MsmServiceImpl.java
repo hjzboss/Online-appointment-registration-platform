@@ -87,7 +87,8 @@ public class MsmServiceImpl implements MsmService {
             String fetchAddress = (String) msmVo.getParam().get("fetchAddress");
             String fetchTime = (String) msmVo.getParam().get("fetchTime");
             String name = (String) msmVo.getParam().get("name");
-            String s = name + "您好，请于" + fetchTime + "在" + fetchAddress + "取号";
+            String hosname = (String) msmVo.getParam().get("hosname");
+            String s ="【" + hosname + "】提醒您：" + name + "您好，您已预约成功，请于" + fetchTime + "在" + fetchAddress + "取号";
             return this.send(msmVo.getPhone(), s);
         }
         return false;
