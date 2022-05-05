@@ -34,5 +34,6 @@ public interface ScheduleService {
     ScheduleOrderVo getScheduleOrderVo(String scheduleId);
     //修改排班
     void update(Schedule schedule);
-
+    //根据HosScheduleId查询
+    Schedule getByHosScheduleId(String id);
 }

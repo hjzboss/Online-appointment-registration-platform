@@ -84,12 +84,42 @@ public class MsmServiceImpl implements MsmService {
     @Override
     public boolean send(MsmVo msmVo) {
         if (!StringUtils.isEmpty(msmVo.getPhone())) {
-            String fetchAddress = (String) msmVo.getParam().get("fetchAddress");
-            String fetchTime = (String) msmVo.getParam().get("fetchTime");
-            String name = (String) msmVo.getParam().get("name");
-            String hosname = (String) msmVo.getParam().get("hosname");
-            String s ="【" + hosname + "】提醒您：" + name + "您好，您已预约成功，请于" + fetchTime + "在" + fetchAddress + "取号";
-            return this.send(msmVo.getPhone(), s);
+            int type = msmVo.getType().getType();
+            String message = null;
+            switch (type) {
+                case 0: {
+                    // 预约成功短信通知
+                    String fetchAddress = (String) msmVo.getParam().get("fetchAddress");
+                    String fetchTime = (String) msmVo.getParam().get("fetchTime");
+                    String name = (String) msmVo.getParam().get("name");
+                    String hosname = (String) msmVo.getParam().get("hosname");
+                    String date = (String) msmVo.getParam().get("reserveDate");
+                    String title = (String) msmVo.getParam().get("title");
+                    String number = (String) msmVo.getParam().get("number");
+                    message = "【" + hosname + "】提醒您：" + name + "您好，您的订单" + date + " " + title + "已预约成功，请于" + fetchTime + "在" + fetchAddress + "凭借身份证取号";
+                    break;
+                }
+                case 1: {
+                    // 取消预约短信通知
+                    String name = (String) msmVo.getParam().get("name");
+                    String hosname = (String) msmVo.getParam().get("hosname");
+                    String date = (String) msmVo.getParam().get("date");
+                    message = "【" + hosname + "】提醒您：" + name + "您好，" + date + "的订单已成功取消";
+                    break;
+                }
+                case 2: {
+                    // todo: 就诊提醒通知
+                    String date = (String) msmVo.getParam().get("reserveDate");
+                    String title = (String) msmVo.getParam().get("title");
+                    String name = (String) msmVo.getParam().get("name");
+                    message = "【陕医通预约挂号平台】提醒您：" + name + "您好，您在" + date + " " + title + "。请及时就诊";
+                    break;
+                }
+                default: {
+                    return false;
+                }
+            }
+            return this.send(msmVo.getPhone(), message);
         }
         return false;
     }

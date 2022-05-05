@@ -91,18 +91,13 @@ public class PaymentServiceImpl extends
 
     /**
      * 获取支付记录
-     *
-     * @param orderId
-     * @param paymentType
-     * @return
      */
     @Override
     public PaymentInfo getPaymentInfo(Long orderId, Integer paymentType) {
         QueryWrapper<PaymentInfo> wrapper = new QueryWrapper<>();
         wrapper.eq("order_id", orderId);
         wrapper.eq("payment_type", paymentType);
-        PaymentInfo paymentInfo = baseMapper.selectOne(wrapper);
-        return paymentInfo;
+        return baseMapper.selectOne(wrapper);
     }
 
 }

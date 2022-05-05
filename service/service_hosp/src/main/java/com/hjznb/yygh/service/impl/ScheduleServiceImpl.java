@@ -339,6 +339,15 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.save(schedule);
     }
 
+    @Override
+    public Schedule getByHosScheduleId(String id) {
+        Schedule schedule = new Schedule();
+        schedule.setHosScheduleId(id);
+        Example<Schedule> userExample = Example.of(schedule);
+        List<Schedule> scheduleList = scheduleRepository.findAll(userExample);
+        return scheduleList.get(0);
+    }
+
 
     /**
      * 获取可预约日期分页数据

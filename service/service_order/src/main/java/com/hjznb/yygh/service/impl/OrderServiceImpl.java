@@ -10,6 +10,7 @@ import com.hjznb.yygh.common.helper.HttpRequestHelper;
 import com.hjznb.yygh.common.rabbit.constant.MqConst;
 import com.hjznb.yygh.common.rabbit.service.RabbitService;
 import com.hjznb.yygh.common.result.ResultCodeEnum;
+import com.hjznb.yygh.enums.MsmTypeEnum;
 import com.hjznb.yygh.enums.OrderStatusEnum;
 import com.hjznb.yygh.hosp.client.HospitalFeignClient;
 import com.hjznb.yygh.mapper.OrderInfoMapper;
@@ -46,13 +47,13 @@ public class OrderServiceImpl extends
     private final PatientFeignClient patientFeignClient;
     private final HospitalFeignClient hospitalFeignClient;
     private final RabbitService rabbitService;
-    private final WeixinService weixinService;
+    @Autowired
+    private WeixinService weixinService;
 
-    public OrderServiceImpl(PatientFeignClient patientFeignClient, HospitalFeignClient hospitalFeignClient, RabbitService rabbitService, WeixinService weixinService) {
+    public OrderServiceImpl(PatientFeignClient patientFeignClient, HospitalFeignClient hospitalFeignClient, RabbitService rabbitService) {
         this.patientFeignClient = patientFeignClient;
         this.hospitalFeignClient = hospitalFeignClient;
         this.rabbitService = rabbitService;
-        this.weixinService = weixinService;
     }
 
     //保存订单
@@ -153,18 +154,14 @@ public class OrderServiceImpl extends
             //短信提示（用于hosp模块接受到消息后更新数据后向用户发送预约成功的短信）
             MsmVo msmVo = new MsmVo();
             msmVo.setPhone(orderInfo.getPatientPhone());
-            String reserveDate =
-                    new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd")
-                            + (orderInfo.getReserveTime() == 0 ? "上午" : "下午");
+            msmVo.setType(MsmTypeEnum.MSM_ORDER);
+            String reserveDate = new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd") + (orderInfo.getReserveTime() == 0 ? "上午" : "下午");
             Map<String, Object> param = new HashMap<String, Object>() {{
-//                put("title", orderInfo.getHosname() + "|" + orderInfo.getDepname() + "|" + orderInfo.getTitle());
-//                put("amount", orderInfo.getAmount());
-//                put("reserveDate", reserveDate);
-//                put("name", orderInfo.getPatientName());
-//                put("quitTime", new DateTime(orderInfo.getQuitTime()).toString("yyyy-MM-dd HH:mm"));
                 put("hosname", orderInfo.getHosname());
                 put("fetchTime", fetchTime);
                 put("fetchAddress", fetchAddress);
+                put("reserveDate", reserveDate);
+                put("title", orderInfo.getHosname() + "|" + orderInfo.getDepname() + "|" + orderInfo.getTitle());
                 put("name", patient.getName());
             }};
             msmVo.setParam(param);
@@ -188,8 +185,10 @@ public class OrderServiceImpl extends
         String reserveDate = orderQueryVo.getReserveDate();//安排时间
         String createTimeBegin = orderQueryVo.getCreateTimeBegin();
         String createTimeEnd = orderQueryVo.getCreateTimeEnd();
+        Long userId = orderQueryVo.getUserId();//用户id
         //对条件值进行非空判断
         QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
         if (!StringUtils.isEmpty(name)) {
             wrapper.like("hosname", name);
         }
@@ -245,6 +244,7 @@ public class OrderServiceImpl extends
         for (OrderInfo orderInfo : orderInfoList) {
             //短信提示
             MsmVo msmVo = new MsmVo();
+            msmVo.setType(MsmTypeEnum.MSM_PATIENT);
             msmVo.setPhone(orderInfo.getPatientPhone());
             String reserveDate = new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd") + (orderInfo.getReserveTime() == 0 ? "上午" : "下午");
             Map<String, Object> param = new HashMap<String, Object>() {{
@@ -264,9 +264,10 @@ public class OrderServiceImpl extends
         OrderInfo orderInfo = baseMapper.selectById(orderId);
         //判断是否取消
         DateTime quitTime = new DateTime(orderInfo.getQuitTime());
-        if (quitTime.isBeforeNow()) {
-            throw new YyghException(ResultCodeEnum.CANCEL_ORDER_NO);
-        }
+        //todo:判断是否能够取消
+//        if (quitTime.isBeforeNow()) {
+//            throw new YyghException(ResultCodeEnum.CANCEL_ORDER_NO);
+//        }
         //调用医院接口实现预约取消
         SignInfoVo signInfoVo = hospitalFeignClient.getSignInfoVo(orderInfo.getHoscode());
         if (null == signInfoVo) {
@@ -298,13 +299,14 @@ public class OrderServiceImpl extends
                 //发送mq更新预约数量
                 OrderMqVo orderMqVo = new OrderMqVo();
                 orderMqVo.setScheduleId(orderInfo.getHosScheduleId());
-                //短信提示
+                //todo:短信提示
                 MsmVo msmVo = new MsmVo();
                 msmVo.setPhone(orderInfo.getPatientPhone());
+                msmVo.setType(MsmTypeEnum.MSM_CANCEL);
                 String reserveDate = new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd") + (orderInfo.getReserveTime() == 0 ? "上午" : "下午");
                 Map<String, Object> param = new HashMap<String, Object>() {{
-                    put("title", orderInfo.getHosname() + "|" + orderInfo.getDepname() + "|" + orderInfo.getTitle());
-                    put("reserveDate", reserveDate);
+                    put("date", reserveDate);
+                    put("hosname", orderInfo.getHosname());
                     put("name", orderInfo.getPatientName());
                 }};
                 msmVo.setParam(param);

@@ -26,16 +26,13 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class WeixinServiceImpl implements WeixinService {
 
-    private final OrderService orderService;
-
     private final PaymentService paymentService;
-
     private final RedisTemplate redisTemplate;
-
     private final RefundInfoService refundInfoService;
+    @Autowired
+    private OrderService orderService;
 
-    public WeixinServiceImpl(OrderService orderService, PaymentService paymentService, RedisTemplate redisTemplate, RefundInfoService refundInfoService) {
-        this.orderService = orderService;
+    public WeixinServiceImpl(PaymentService paymentService, RedisTemplate redisTemplate, RefundInfoService refundInfoService) {
         this.paymentService = paymentService;
         this.redisTemplate = redisTemplate;
         this.refundInfoService = refundInfoService;
@@ -64,7 +61,6 @@ public class WeixinServiceImpl implements WeixinService {
             String body = order.getReserveDate() + "就诊" + order.getDepname();
             paramMap.put("body", body);
             paramMap.put("out_trade_no", order.getOutTradeNo());
-            //paramMap.put("total_fee", order.getAmount().multiply(new BigDecimal("100")).longValue()+"");
             paramMap.put("total_fee", "1"); //为了测试，统一写成这个值
             paramMap.put("spbill_create_ip", "127.0.0.1");
             paramMap.put("notify_url", "http://guli.shop/api/order/weixinPay/weixinNotify");
@@ -149,8 +145,6 @@ public class WeixinServiceImpl implements WeixinService {
             paramMap.put("transaction_id", paymentInfo.getTradeNo()); //微信订单号
             paramMap.put("out_trade_no", paymentInfo.getOutTradeNo()); //商户订单编号
             paramMap.put("out_refund_no", "tk" + paymentInfo.getOutTradeNo()); //商户退款单号
-//       paramMap.put("total_fee",paymentInfoQuery.getTotalAmount().multiply(new BigDecimal("100")).longValue()+"");
-//       paramMap.put("refund_fee",paymentInfoQuery.getTotalAmount().multiply(new BigDecimal("100")).longValue()+"");
             paramMap.put("total_fee", "1");
             paramMap.put("refund_fee", "1");
             String paramXml = WXPayUtil.generateSignedXml(paramMap, ConstantPropertiesUtils.PARTNERKEY);

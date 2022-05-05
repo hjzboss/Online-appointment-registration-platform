@@ -16,7 +16,8 @@
     "axios": "^0.26.1",
     "element-ui": "^2.15.6",
     "js-cookie": "^3.0.1",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "vue-qriously": "^1.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

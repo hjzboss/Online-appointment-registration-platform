@@ -104,7 +104,7 @@
         <div class="operate-view" style="height: 350px;">
           <div class="wrapper wechat">
             <div>
-              <img src="images/weixin.jpg" alt="">
+              <qriously :value="payObj.codeUrl" :size="220"/>
 
               <div style="text-align: center;line-height: 25px;margin-bottom: 40px;">
                 请使用微信扫一扫<br/>
@@ -122,6 +122,7 @@
 import '~/assets/css/hospital_personal.css'
 import '~/assets/css/hospital.css'
 import orderInfoApi from '@/api/order/orderInfo'
+import weixinApi from '@/api/order/weixin'
 
 export default {
   data() {
@@ -161,6 +162,42 @@ export default {
         this.$message.info('已取消取消预约')
       })
     },
+
+    pay() {
+      this.dialogPayVisible = true
+      weixinApi.createNative(this.orderId).then(response => {
+        this.payObj = response.data
+        if (this.payObj.codeUrl === '' || this.payObj.codeUrl === null) {
+          this.dialogPayVisible = false
+          this.$message.error("支付错误")
+        } else {
+          // 每3秒调用查询支付状态的接口
+          this.timer = setInterval(() => {
+            this.queryPayStatus(this.orderId)
+          }, 3000);
+        }
+      })
+    },
+
+    // 查询支付状态
+    queryPayStatus(orderId) {
+      weixinApi.queryPayStatus(orderId).then(response => {
+        if (response.message === '支付中') {
+          return
+        }
+        // 清楚定时器
+        clearInterval(this.timer);
+        window.location.reload()
+      })
+    },
+
+    closeDialog() {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+    }
+
+
   }
 }
 </script>

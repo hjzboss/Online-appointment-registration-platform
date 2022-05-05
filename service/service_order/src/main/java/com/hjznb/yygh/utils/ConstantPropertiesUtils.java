@@ -11,11 +11,11 @@ public class ConstantPropertiesUtils implements InitializingBean {
     public static String PARTNER;
     public static String PARTNERKEY;
     public static String CERT;
-    @Value("${weixin.appid}")
+    @Value("${weixin.pay.appid}")
     private String appid;
-    @Value("${weixin.partner}")
+    @Value("${weixin.pay.partner}")
     private String partner;
-    @Value("${weixin.partnerkey}")
+    @Value("${weixin.pay.partnerkey}")
     private String partnerkey;
     @Value("${weixin.cert}")
     private String cert;

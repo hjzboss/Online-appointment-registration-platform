@@ -1,5 +1,6 @@
 package com.hjznb.yygh.vo.msm;
 
+import com.hjznb.yygh.enums.MsmTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,6 +17,9 @@ public class MsmVo {
 
     @ApiModelProperty(value = "短信模板code")
     private String templateCode;
+
+    @ApiModelProperty(value = "短信类型")
+    private MsmTypeEnum type;
 
     @ApiModelProperty(value = "短信模板参数")
     private Map<String, Object> param;

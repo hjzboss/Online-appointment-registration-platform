@@ -35,13 +35,15 @@ public class HospitalReceiver {
             key = {MqConst.ROUTING_ORDER}
     ))
     public void receiver(OrderMqVo orderMqVo, Message message, Channel channel) throws IOException {
-        Schedule schedule = scheduleService.getById(orderMqVo.getScheduleId());
+        Schedule schedule;
         if (null != orderMqVo.getAvailableNumber()) {
             //下单成功更新预约数
+            schedule = scheduleService.getById(orderMqVo.getScheduleId());
             schedule.setReservedNumber(orderMqVo.getReservedNumber());
             schedule.setAvailableNumber(orderMqVo.getAvailableNumber());
         } else {
             //取消预约更新预约数
+            schedule = scheduleService.getByHosScheduleId(orderMqVo.getScheduleId());
             int availableNumber = schedule.getAvailableNumber() + 1;
             schedule.setAvailableNumber(availableNumber);
         }
