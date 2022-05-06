@@ -20,11 +20,11 @@ public class OrderQueryVo {
     @ApiModelProperty(value = "就诊人id")
     private Long patientId;
 
-    @ApiModelProperty(value = "就诊人")
+    @ApiModelProperty(value = "就诊人名称")
     private String patientName;
 
     @ApiModelProperty(value = "医院名称")
-    private String keyword;
+    private String hosname;
 
     @ApiModelProperty(value = "订单状态")
     private String orderStatus;

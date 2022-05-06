@@ -21,9 +21,7 @@ import com.hjznb.yygh.service.WeixinService;
 import com.hjznb.yygh.user.client.PatientFeignClient;
 import com.hjznb.yygh.vo.hosp.ScheduleOrderVo;
 import com.hjznb.yygh.vo.msm.MsmVo;
-import com.hjznb.yygh.vo.order.OrderMqVo;
-import com.hjznb.yygh.vo.order.OrderQueryVo;
-import com.hjznb.yygh.vo.order.SignInfoVo;
+import com.hjznb.yygh.vo.order.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * @author hjz
@@ -179,21 +178,23 @@ public class OrderServiceImpl extends
     @Override
     public IPage<OrderInfo> selectPage(Page<OrderInfo> pageParam, OrderQueryVo orderQueryVo) {
         //orderQueryVo获取条件值
-        String name = orderQueryVo.getKeyword(); //医院名称
-        Long patientId = orderQueryVo.getPatientId(); //就诊人名称
+        String hosname = orderQueryVo.getHosname(); //医院名称
+        String patientName = orderQueryVo.getPatientName(); //就诊人名称
         String orderStatus = orderQueryVo.getOrderStatus(); //订单状态
         String reserveDate = orderQueryVo.getReserveDate();//安排时间
+        String outTradeNo = orderQueryVo.getOutTradeNo();//订单号
         String createTimeBegin = orderQueryVo.getCreateTimeBegin();
         String createTimeEnd = orderQueryVo.getCreateTimeEnd();
-        Long userId = orderQueryVo.getUserId();//用户id
         //对条件值进行非空判断
         QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userId);
-        if (!StringUtils.isEmpty(name)) {
-            wrapper.like("hosname", name);
+        if (!StringUtils.isEmpty(hosname)) {
+            wrapper.like("hosname", hosname);
         }
-        if (!StringUtils.isEmpty(patientId)) {
-            wrapper.eq("patient_id", patientId);
+        if (!StringUtils.isEmpty(patientName)) {
+            wrapper.like("patient_name", patientName);
+        }
+        if (!StringUtils.isEmpty(outTradeNo)) {
+            wrapper.like("out_trade_no", outTradeNo);
         }
         if (!StringUtils.isEmpty(orderStatus)) {
             wrapper.eq("order_status", orderStatus);
@@ -315,6 +316,24 @@ public class OrderServiceImpl extends
         }
         return true;
     }
+
+    @Override
+    public Map<String, Object> getCountMap(OrderCountQueryVo orderCountQueryVo) {
+        Map<String, Object> map = new HashMap<>();
+
+        List<OrderCountVo> orderCountVoList
+                = baseMapper.selectOrderCount(orderCountQueryVo);
+        //日期列表
+        List<String> dateList
+                = orderCountVoList.stream().map(OrderCountVo::getReserveDate).collect(Collectors.toList());
+        //统计列表
+        List<Integer> countList
+                = orderCountVoList.stream().map(OrderCountVo::getCount).collect(Collectors.toList());
+        map.put("dateList", dateList);
+        map.put("countList", countList);
+        return map;
+    }
+
 
     private void packOrderInfo(OrderInfo orderInfo) {
         orderInfo.getParam().put("orderStatusString", OrderStatusEnum.getStatusNameByStatus(orderInfo.getOrderStatus()));
