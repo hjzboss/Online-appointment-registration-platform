@@ -104,15 +104,15 @@ public class MsmServiceImpl implements MsmService {
                     String name = (String) msmVo.getParam().get("name");
                     String hosname = (String) msmVo.getParam().get("hosname");
                     String date = (String) msmVo.getParam().get("date");
-                    message = "【" + hosname + "】提醒您：" + name + "您好，" + date + "的订单已成功取消";
+                    message = "【" + hosname + "】提醒您：" + name + "您好，" + date + "的预约已成功取消";
                     break;
                 }
                 case 2: {
-                    // todo: 就诊提醒通知
+                    // 就诊提醒
                     String date = (String) msmVo.getParam().get("reserveDate");
                     String title = (String) msmVo.getParam().get("title");
                     String name = (String) msmVo.getParam().get("name");
-                    message = "【陕医通预约挂号平台】提醒您：" + name + "您好，您在" + date + " " + title + "。请及时就诊";
+                    message = "【陕医通预约挂号平台】提醒您：" + name + "您好，您有就诊通知：" + date + " " + title + "。请及时就诊";
                     break;
                 }
                 default: {

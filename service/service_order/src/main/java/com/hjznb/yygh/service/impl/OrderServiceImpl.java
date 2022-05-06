@@ -296,10 +296,9 @@ public class OrderServiceImpl extends
                 orderInfo.setOrderStatus(OrderStatusEnum.CANCLE.getStatus());
                 baseMapper.updateById(orderInfo);
 
-                //发送mq更新预约数量
+                //发送mq更新预约数量，短信提示
                 OrderMqVo orderMqVo = new OrderMqVo();
                 orderMqVo.setScheduleId(orderInfo.getHosScheduleId());
-                //todo:短信提示
                 MsmVo msmVo = new MsmVo();
                 msmVo.setPhone(orderInfo.getPatientPhone());
                 msmVo.setType(MsmTypeEnum.MSM_CANCEL);
