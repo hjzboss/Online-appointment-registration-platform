@@ -239,6 +239,7 @@ public class OrderServiceImpl extends
     @Override
     public void patientTips() {
         QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
+        //对到达就诊日期和状态为未取消状态的病人进行就医提醒
         wrapper.eq("reserve_date", new DateTime().toString("yyyy-MM-dd"));
         wrapper.ne("order_status", OrderStatusEnum.CANCLE.getStatus());
         List<OrderInfo> orderInfoList = baseMapper.selectList(wrapper);
@@ -265,10 +266,10 @@ public class OrderServiceImpl extends
         OrderInfo orderInfo = baseMapper.selectById(orderId);
         //判断是否取消
         DateTime quitTime = new DateTime(orderInfo.getQuitTime());
-        //todo:判断是否能够取消
-//        if (quitTime.isBeforeNow()) {
-//            throw new YyghException(ResultCodeEnum.CANCEL_ORDER_NO);
-//        }
+        //判断是否能够取消
+        if (quitTime.isBeforeNow()) {
+            throw new YyghException(ResultCodeEnum.CANCEL_ORDER_NO);
+        }
         //调用医院接口实现预约取消
         SignInfoVo signInfoVo = hospitalFeignClient.getSignInfoVo(orderInfo.getHoscode());
         if (null == signInfoVo) {
@@ -283,20 +284,24 @@ public class OrderServiceImpl extends
 
         JSONObject result = HttpRequestHelper.sendRequest(reqMap,
                 signInfoVo.getApiUrl() + "/order/updateCancelStatus");
+        System.out.println("调用成功");
         //根据医院接口返回数据
         if (result.getInteger("code") != 200) {
             throw new YyghException(result.getString("message"), ResultCodeEnum.FAIL.getCode());
         } else {
+            System.out.println("进入退款部分");
             //判断当前订单是否可以取消
-            if (orderInfo.getOrderStatus().intValue() == OrderStatusEnum.PAID.getStatus().intValue()) {
-                Boolean isRefund = weixinService.refund(orderId);
-                if (!isRefund) {
-                    throw new YyghException(ResultCodeEnum.CANCEL_ORDER_FAIL);
+            if ((orderInfo.getOrderStatus().intValue() == OrderStatusEnum.PAID.getStatus().intValue()) || (orderInfo.getOrderStatus().intValue() == OrderStatusEnum.UNPAID.getStatus().intValue())) {
+                if (orderInfo.getOrderStatus().intValue() == OrderStatusEnum.PAID.getStatus().intValue()) {
+                    Boolean isRefund = weixinService.refund(orderId);
+                    if (!isRefund) {
+                        throw new YyghException(ResultCodeEnum.CANCEL_ORDER_FAIL);
+                    }
                 }
                 //更新订单状态
                 orderInfo.setOrderStatus(OrderStatusEnum.CANCLE.getStatus());
                 baseMapper.updateById(orderInfo);
-
+                System.out.println("取消成功");
                 //发送mq更新预约数量，短信提示
                 OrderMqVo orderMqVo = new OrderMqVo();
                 orderMqVo.setScheduleId(orderInfo.getHosScheduleId());

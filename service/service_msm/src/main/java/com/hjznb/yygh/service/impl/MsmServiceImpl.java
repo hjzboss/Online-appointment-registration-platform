@@ -77,8 +77,8 @@ public class MsmServiceImpl implements MsmService {
         } else {
             //异常返回输出错误码和错误信息
             System.out.println("短信发送失败！");
+            return false;
         }
-        return false;
     }
 
     @Override

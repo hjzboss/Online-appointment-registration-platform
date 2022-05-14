@@ -33,9 +33,7 @@ public interface OrderService extends IService<OrderInfo> {
     //取消预约
     Boolean cancelOrder(Long orderId);
 
-    /**
-     * 订单统计
-     */
+    //获取订单统计数据
     Map<String, Object> getCountMap(OrderCountQueryVo orderCountQueryVo);
 
 }

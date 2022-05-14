@@ -37,10 +37,7 @@
         </span>
       </div>
       <div class="nav-item">
-        <span class="v-link clickable dark"> 停诊信息 </span>
-      </div>
-      <div class="nav-item">
-        <span class="v-link clickable dark"> 查询/取消 </span>
+        <span class="v-link clickable dark"> 评论 </span>
       </div>
     </div>
     <!-- 左侧导航 #end -->

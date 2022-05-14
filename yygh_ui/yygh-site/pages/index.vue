@@ -37,7 +37,7 @@
               <div class="condition-wrapper">
                 <!--医院等级遍历-->
                 <span v-for="(item, index) in hostypeList" :key="index" class="item v-link clickable"
-                      @click="hostypeSelect(item.value, index)" :class="hostypeActiveIndex == index ? 'selected' : ''">
+                      @click="hostypeSelect(item.value, index)" :class="hostypeActiveIndex === index ? 'selected' : ''">
                   {{ item.name }}
                 </span>
               </div>
@@ -46,7 +46,7 @@
               <span class="label">地区：</span>
               <div class="condition-wrapper">
                 <span v-for="(item,index) in districtList" :key="index" class="item v-link clickable"
-                      :class="provinceActiveIndex == index ? 'selected' : ''"
+                      :class="provinceActiveIndex === index ? 'selected' : ''"
                       @click="districtSelect(item.value, index)">
                   {{ item.name }}
                 </span>
@@ -86,20 +86,20 @@
         <div class="common-dept">
           <div class="header-wrapper">
             <div class="title">常见科室</div>
-            <div class="all-wrapper">
+            <div class="all-wrapper" @click="scheduleNotice()">
               <span>全部</span>
               <span class="iconfont icon"></span>
             </div>
           </div>
           <div class="content-wrapper">
-            <span class="item v-link clickable dark">神经内科 </span>
-            <span class="item v-link clickable dark">消化内科 </span>
-            <span class="item v-link clickable dark">呼吸内科 </span>
-            <span class="item v-link clickable dark">内科 </span>
-            <span class="item v-link clickable dark">神经外科 </span>
-            <span class="item v-link clickable dark">妇科 </span>
-            <span class="item v-link clickable dark"> 产科 </span>
-            <span class="item v-link clickable dark">儿科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()">神经内科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()">消化内科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()">呼吸内科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()">内科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()">神经外科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()">妇科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()"> 产科 </span>
+            <span class="item v-link clickable dark" @click="scheduleNotice()">儿科 </span>
           </div>
         </div>
         <div class="space">
@@ -110,28 +110,28 @@
               </div>
               <span class="title">平台公告</span>
             </div>
-            <div class="all-wrapper">
+            <div class="all-wrapper" @click="showAll(0)">
               <span>全部</span>
               <span class="iconfont icon"></span>
             </div>
           </div>
           <div class="content-wrapper">
-            <div class="notice-wrapper">
+            <div class="notice-wrapper" @click="closeNotice(0)">
               <div class="point"></div>
               <span class="notice v-link clickable dark"
-              >关于延长北京大学国际医院放假的通知
+              >关于延长唐都医院放假的通知
               </span>
             </div>
-            <div class="notice-wrapper">
+            <div class="notice-wrapper" @click="closeNotice(1)">
               <div class="point"></div>
               <span class="notice v-link clickable dark"
-              >北京中医药大学东方医院部分科室医生门诊医
+              >临潼人民医院号源暂停更新通知
               </span>
             </div>
-            <div class="notice-wrapper">
+            <div class="notice-wrapper" @click="closeNotice(2)">
               <div class="point"></div>
               <span class="notice v-link clickable dark">
-                武警总医院号源暂停更新通知
+                红会医院号源暂停更新通知
               </span>
             </div>
           </div>
@@ -144,28 +144,28 @@
               </div>
               <span class="title">停诊公告</span>
             </div>
-            <div class="all-wrapper">
+            <div class="all-wrapper" @click="showAll(1)">
               <span>全部</span>
               <span class="iconfont icon"></span>
             </div>
           </div>
           <div class="content-wrapper">
-            <div class="notice-wrapper">
+            <div class="notice-wrapper" @click="closeNotice(3)">
               <div class="point"></div>
               <span class="notice v-link clickable dark">
-                中国人民解放军总医院第六医学中心(原海军总医院)呼吸内科门诊停诊公告
+                核工业417呼吸内科门诊停诊公告
               </span>
             </div>
-            <div class="notice-wrapper">
+            <div class="notice-wrapper" @click="closeNotice(4)">
               <div class="point"></div>
               <span class="notice v-link clickable dark">
-                首都医科大学附属北京潞河医院老年医学科门诊停诊公告
+                西京医院老年医学科门诊停诊公告
               </span>
             </div>
-            <div class="notice-wrapper">
+            <div class="notice-wrapper" @click="closeNotice(5)">
               <div class="point"></div>
               <span class="notice v-link clickable dark"
-              >中日友好医院中西医结合心内科门诊停诊公告
+              >西安市中医院中西医结合心内科门诊停诊公告
               </span>
             </div>
           </div>
@@ -223,7 +223,7 @@ export default {
             this.hostypeList.push(response.data[i])
           }
           //查询地区数据
-          dictApi.findByDictCode('Beijing')
+          dictApi.findByDictCode('Xian')
             .then(response => {
               this.districtList = []
               this.districtList.push({"name": "全部 ", "value": ""})
@@ -263,7 +263,7 @@ export default {
     //在输入框输入值，弹出下拉框，显示相关内容
     querySearchAsync(queryString, cb) {
       this.searchObj = []
-      if (queryString == '') return
+      if (queryString === '') return
       hospApi.getByHosname(queryString).then(response => {
         for (let i = 0, len = response.data.length; i < len; i++) {
           response.data[i].value = response.data[i].hosname
@@ -278,6 +278,18 @@ export default {
     //点击某个医院名称，跳转到pages文件夹下的详情页面中，详情页面命名为_hoscode.vue
     show(hoscode) {
       window.location.href = '/hospital/' + hoscode
+    },
+    //跳转到通知详情页面
+    closeNotice(hoscode) {
+      window.location.href = '/notice/' + hoscode
+    },
+    //科室功能维护中
+    scheduleNotice() {
+      this.$message.info('科室功能维护中，敬请谅解')
+    },
+    //显示全部
+    showAll(num) {
+      window.location.href = '/all/' + num
     }
   }
 }

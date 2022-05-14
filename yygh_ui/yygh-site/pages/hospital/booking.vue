@@ -15,10 +15,7 @@
               :onclick="'javascript:window.location=\'/hospital/notice/'+schedule.hoscode+'\''"> 预约须知 </span>
       </div>
       <div class="nav-item "><span
-        class="v-link clickable dark"> 停诊信息 </span>
-      </div>
-      <div class="nav-item "><span
-        class="v-link clickable dark"> 查询/取消 </span>
+        class="v-link clickable dark"> 评论 </span>
       </div>
     </div>
     <!-- 左侧导航 #end -->
@@ -218,7 +215,6 @@ export default {
       }
 
       this.submitBnt = '正在提交...'
-      alert('shit')
       orderInfoApi.submitOrder(this.scheduleId, this.patient.id).then(response => {
         let orderId = response.data
         console.log(orderId)

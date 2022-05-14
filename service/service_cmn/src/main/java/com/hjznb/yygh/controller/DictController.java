@@ -59,8 +59,7 @@ public class DictController {
     @ApiOperation(value = "根据value查询")
     @GetMapping("getName/{value}")
     public String getName(@PathVariable String value) {
-        String dictName = dictService.getDictName("", value);
-        return dictName;
+        return dictService.getDictName("", value);
     }
 
     //根据dictCode获取下级节点

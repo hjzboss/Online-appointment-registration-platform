@@ -46,7 +46,7 @@
       <tbody>
       <tr>
         <th width="15%">姓名</th>
-        <td width="35%">{{ patient.name }}天</td>
+        <td width="35%">{{ patient.name }}</td>
         <th width="15%">证件类型</th>
         <td width="35%">{{ patient.param.certificatesTypeString }}</td>
       </tr>

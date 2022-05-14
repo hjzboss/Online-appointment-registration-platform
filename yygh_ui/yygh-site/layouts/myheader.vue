@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="left-wrapper v-link selected">
         <img style="width: 50px" width="50" height="50" src="~assets/images/logo.png">
-        <span class="text">陕医通 预约挂号统一平台</span>
+        <a href="/" class="text" style="text-decoration: none">陕医通 预约挂号统一平台</a>
       </div>
       <!-- 搜索框 -->
       <div class="search-wrapper">
@@ -26,7 +26,6 @@
       </div>
       <!-- 右侧 -->
       <div class="right-wrapper">
-        <span class="v-link clickable">帮助中心</span>
 
         <span v-if="name === ''" class="v-link clickable" @click="showLogin()" id="loginDialog">登录/注册</span>
 
@@ -94,7 +93,7 @@
 
         <div class="info-wrapper">
           <div class="code-wrapper">
-            <div><img src="//img.114yygh.com/static/web/code_login_wechat.png" class="code-img">
+            <div><img src="~assets/images/img.png" class="code-img">
               <div class="code-text"><span class="iconfont icon"></span>微信扫一扫关注
               </div>
               <div class="code-text"> “快速预约挂号”</div>
@@ -107,7 +106,7 @@
             </div>
           </div>
           <div class="slogan">
-            <div>xxxxxx官方指定平台</div>
+            <div>陕西省官方指定平台</div>
             <div>快速挂号 安全放心</div>
           </div>
         </div>

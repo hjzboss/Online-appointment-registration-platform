@@ -49,7 +49,7 @@
           <el-upload
             :multiple="false"
             :on-success="onUploadSuccess"
-            :action="'http://localhost:8202/admin/cmn/dict/importData'"
+            :action="'http://localhost/admin/cmn/dict/importData'"
             class="upload-demo">
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传xls文件，且不超过500kb</div>

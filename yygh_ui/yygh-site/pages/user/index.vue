@@ -8,7 +8,7 @@
         <span class="v-link selected dark" onclick="window.location='/user'">实名认证 </span>
       </div>
       <div class="nav-item">
-        <span class="v-link selected dark" onclick="window.location='/order'"> 挂号订单 </span>
+        <span class="v-link clickable dark" onclick="window.location='/order'"> 挂号订单 </span>
       </div>
       <div class="nav-item ">
         <span class="v-link clickable dark" onclick="window.location='/patient'"> 就诊人管理 </span>
@@ -17,7 +17,7 @@
         <span class="v-link clickable dark"> 修改账号信息 </span>
       </div>
       <div class="nav-item ">
-        <span class="v-link clickable dark"> 意见反馈 </span>
+        <span class="v-link clickable dark" onclick="window.location='/feedback'"> 意见反馈 </span>
       </div>
     </div>
     <!-- 左侧导航 #end -->
@@ -90,13 +90,14 @@
                 </div>
               </el-form-item>
               <el-form-item prop="name" label="证件类型：">
-                {{ userInfo.certificatesType}}
+                {{ userInfo.certificatesType }}
               </el-form-item>
               <el-form-item prop="name" label="证件号码：">
                 {{ userInfo.certificatesNo }}
               </el-form-item>
             </el-form>
           </div>
+          <br v-for="(item, index) in new Array(5)" :key="index">
         </div>
 
       </div>
@@ -158,9 +159,8 @@ export default {
     saveUserAuah() {
       if (this.submitBnt === '正在提交...') {
         this.$message.info('重复提交')
-        return
+        return;
       }
-
       this.submitBnt = '正在提交...'
       userInfoApi.saveUserAuah(this.userAuah).then(response => {
         this.$message.success("提交成功")

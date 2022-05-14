@@ -16,7 +16,7 @@
         <span class="v-link clickable dark"> 修改账号信息 </span>
       </div>
       <div class="nav-item ">
-        <span class="v-link clickable dark"> 意见反馈 </span>
+        <span class="v-link clickable dark" onclick="window.location='/feedback'"> 意见反馈 </span>
       </div>
     </div><!-- 左侧导航 #end -->
     <!-- 右侧内容 #start -->
