@@ -5,6 +5,7 @@ import com.hjznb.yygh.common.utils.AuthContextHolder;
 import com.hjznb.yygh.model.user.UserInfo;
 import com.hjznb.yygh.service.UserInfoService;
 import com.hjznb.yygh.vo.user.LoginVo;
+import com.hjznb.yygh.vo.user.ModifyVo;
 import com.hjznb.yygh.vo.user.UserAuthVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,14 @@ public class UserInfoApiController {
     public Result login(@RequestBody LoginVo loginVo) {
         Map<String, Object> info = userInfoService.loginUser(loginVo);
         return Result.ok(info);
+    }
+
+    //用户信息修改接口
+    @ApiOperation(value = "用户手机号修改接口")
+    @PostMapping("modify")
+    public Result modify(@RequestBody ModifyVo modifyVo) {
+        userInfoService.modifyUser(modifyVo);
+        return Result.ok();
     }
 
     //用户认证接口

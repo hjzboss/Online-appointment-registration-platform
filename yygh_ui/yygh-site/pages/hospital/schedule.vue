@@ -16,7 +16,8 @@
               :onclick="'javascript:window.location=\'/hospital/notice/'+hoscode+'\''"> 预约须知 </span>
       </div>
       <div class="nav-item "><span
-        class="v-link clickable dark"> 评论 </span>
+        class="v-link clickable dark"
+        :onclick="'javascript:window.location=\'/hospital/comment/'+hoscode+'\''"> 评价 </span>
       </div>
     </div>
     <!-- 左侧导航 #end -->

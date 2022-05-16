@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjznb.yygh.model.user.UserInfo;
 import com.hjznb.yygh.vo.user.LoginVo;
+import com.hjznb.yygh.vo.user.ModifyVo;
 import com.hjznb.yygh.vo.user.UserAuthVo;
 import com.hjznb.yygh.vo.user.UserInfoQueryVo;
 
@@ -31,4 +32,7 @@ public interface UserInfoService extends IService<UserInfo> {
 
     //认证审批
     void approval(Long userId, Integer authStatus);
+
+    //用户信息修改
+    void modifyUser(ModifyVo modifyVo);
 }

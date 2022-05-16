@@ -68,10 +68,10 @@ public class OrderServiceImpl extends
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
         //todo:当前时间不可以预约
-//        if (new DateTime(scheduleOrderVo.getStartTime()).isAfterNow()
-//                || new DateTime(scheduleOrderVo.getEndTime()).isBeforeNow()) {
-//            throw new YyghException(ResultCodeEnum.TIME_NO);
-//        }
+        if (new DateTime(scheduleOrderVo.getStartTime()).isAfterNow()
+                || new DateTime(scheduleOrderVo.getEndTime()).isBeforeNow()) {
+            throw new YyghException(ResultCodeEnum.TIME_NO);
+        }
         //获取医院签名和url
         SignInfoVo signInfoVo = hospitalFeignClient.getSignInfoVo(scheduleOrderVo.getHoscode());
         if (null == scheduleOrderVo) {
@@ -337,6 +337,16 @@ public class OrderServiceImpl extends
         map.put("dateList", dateList);
         map.put("countList", countList);
         return map;
+    }
+
+    //更新评论状态
+    @Override
+    public void updateCommentStatus(String outTradeNo, Integer status) {
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("out_trade_no", outTradeNo);
+        OrderInfo orderInfo = baseMapper.selectOne(wrapper);
+        orderInfo.setCommentStatus(status);
+        this.updateById(orderInfo);
     }
 
 

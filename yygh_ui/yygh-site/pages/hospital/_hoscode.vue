@@ -37,7 +37,8 @@
         </span>
       </div>
       <div class="nav-item">
-        <span class="v-link clickable dark"> 评论 </span>
+        <span class="v-link clickable dark"
+              :onclick="'javascript:window.location=\'/hospital/comment/'+hospital.hoscode+'\''"> 评价 </span>
       </div>
     </div>
     <!-- 左侧导航 #end -->
@@ -216,7 +217,7 @@ export default {
         // 状态为2认证通过
         if (!authStatus || authStatus !== 2) {
           window.location.href = '/user'
-          return
+
         }
       })
       window.location.href = '/hospital/schedule?hoscode=' + this.hospital.hoscode + "&depcode=" + depcode

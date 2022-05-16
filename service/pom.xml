@@ -20,6 +20,7 @@
         <module>service_order</module>
         <module>service_task</module>
         <module>service_statistics</module>
+        <module>service_comment</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

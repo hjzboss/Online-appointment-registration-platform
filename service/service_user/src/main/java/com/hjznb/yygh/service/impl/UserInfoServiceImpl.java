@@ -14,17 +14,21 @@ import com.hjznb.yygh.model.user.UserInfo;
 import com.hjznb.yygh.service.PatientService;
 import com.hjznb.yygh.service.UserInfoService;
 import com.hjznb.yygh.vo.user.LoginVo;
+import com.hjznb.yygh.vo.user.ModifyVo;
 import com.hjznb.yygh.vo.user.UserAuthVo;
 import com.hjznb.yygh.vo.user.UserInfoQueryVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class UserInfoServiceImpl extends
         ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
 
@@ -212,8 +216,32 @@ public class UserInfoServiceImpl extends
             UserInfo userInfo = baseMapper.selectById(userId);
             userInfo.setAuthStatus(authStatus);
             baseMapper.updateById(userInfo);
-
         }
+    }
+
+    //用户信息修改
+    @Override
+    public void modifyUser(ModifyVo modifyVo) {
+        Long id = modifyVo.getId();
+        String code = modifyVo.getCode();
+        String phone = modifyVo.getPhone();
+        System.out.println("{code: " + code + "\t" + "phone: " + phone + "}");
+        //判断手机号和验证码是否为空
+        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)) {
+            throw new YyghException(ResultCodeEnum.PARAM_ERROR);
+        }
+
+        //判断手机验证码和输入的验证码是否一致
+        String redisCode = redisTemplate.opsForValue().get(phone);
+        if (!code.equals(redisCode)) {
+            throw new YyghException(ResultCodeEnum.CODE_ERROR);
+        }
+        log.info("----------开始修改----------");
+        //按用户id查找信息后修改手机号，然后更新
+        UserInfo userInfo = baseMapper.selectById(id);
+        userInfo.setPhone(phone);
+        baseMapper.updateById(userInfo);
+        log.info("----------修改完成----------");
     }
 
     //编号变成对应值封装

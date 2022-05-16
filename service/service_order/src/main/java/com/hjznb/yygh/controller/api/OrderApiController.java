@@ -84,4 +84,10 @@ public class OrderApiController {
         return orderService.getCountMap(orderCountQueryVo);
     }
 
+    @ApiOperation(value = "修改订单评论状态")
+    @PutMapping("inner/commentStatus/{outTradeNo}/{status}")
+    public Result updateCommentOrder(@PathVariable Integer status, @PathVariable String outTradeNo) {
+        orderService.updateCommentStatus(outTradeNo, status);
+        return Result.ok();
+    }
 }

@@ -24,5 +24,13 @@ export default {
       method: 'post',
       data: userAuah
     })
+  },
+
+  modify(user) {
+    return request({
+      url: `${api_name}/modify`,
+      method: `post`,
+      data: user
+    })
   }
 }

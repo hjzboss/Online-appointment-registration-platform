@@ -26,7 +26,7 @@
       </div>
       <!-- 右侧 -->
       <div class="right-wrapper">
-
+        <span class="v-link clickable">帮助中心</span>
         <span v-if="name === ''" class="v-link clickable" @click="showLogin()" id="loginDialog">登录/注册</span>
 
         <el-dropdown v-if="name !== ''" @command="loginMenu">
@@ -37,6 +37,7 @@
             <el-dropdown-item command="/user">实名认证</el-dropdown-item>
             <el-dropdown-item command="/order">挂号订单</el-dropdown-item>
             <el-dropdown-item command="/patient">就诊人管理</el-dropdown-item>
+            <el-dropdown-item command="/modify">修改账号信息</el-dropdown-item>
             <el-dropdown-item command="/logout" divided>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

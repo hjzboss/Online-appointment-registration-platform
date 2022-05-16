@@ -13,10 +13,7 @@
         <span class="v-link clickable dark" onclick="window.location='/patient'"> 就诊人管理 </span>
       </div>
       <div class="nav-item ">
-        <span class="v-link clickable dark"> 修改账号信息 </span>
-      </div>
-      <div class="nav-item ">
-        <span class="v-link clickable dark" onclick="window.location='/feedback'"> 意见反馈 </span>
+        <span class="v-link clickable dark" onclick="window.location='/modify'"> 修改账号信息 </span>
       </div>
     </div>
     <!-- 左侧导航 #end -->
@@ -93,6 +90,10 @@
               <template slot-scope="scope">
                 <el-button type="text" class="v-link highlight clickable selected" @click="show(scope.row.id)">详情
                 </el-button>
+                <el-button type="text" class="v-link highlight clickable selected" v-if="scope.row.param.orderStatusString === '已取号'" @click="comment(scope.row.id)">评价
+                </el-button>
+                <el-button type="text" disabled class="v-link highlight clickable selected" v-if="scope.row.param.orderStatusString !== '已取号'">评价
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -162,6 +163,9 @@ export default {
     },
     show(id) {
       window.location.href = '/order/show?orderId=' + id
+    },
+    comment(id) {
+      window.location.href = '/order/comment?orderId=' + id
     }
   }
 }

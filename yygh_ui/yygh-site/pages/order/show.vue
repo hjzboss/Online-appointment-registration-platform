@@ -13,10 +13,7 @@
         <span class="v-link clickable dark" onclick="window.location='/patient'"> 就诊人管理 </span>
       </div>
       <div class="nav-item ">
-        <span class="v-link clickable dark"> 修改账号信息 </span>
-      </div>
-      <div class="nav-item ">
-        <span class="v-link clickable dark" onclick="window.location='/feedback'"> 意见反馈 </span>
+        <span class="v-link clickable dark" onclick="window.location='/modify'"> 修改账号信息 </span>
       </div>
     </div>
     <!-- 左侧导航 #end -->
@@ -28,13 +25,6 @@
           <div class="left-wrapper">
             <div class="status-wrapper BOOKING_SUCCESS">
               <span class="iconfont"></span> {{ orderInfo.param.orderStatusString }}
-            </div>
-          </div>
-          <div class="right-wrapper">
-            <img src="//img.114yygh.com/static/web/code_order_detail.png" class="code-img">
-            <div class="content-wrapper">
-              <div> 微信<span class="iconfont"></span>关注“北京114预约挂号”</div>
-              <div class="watch-wrapper"> 快速挂号，轻松就医</div>
             </div>
           </div>
         </div>
