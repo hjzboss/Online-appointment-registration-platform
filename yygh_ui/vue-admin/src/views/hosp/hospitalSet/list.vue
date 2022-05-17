@@ -31,7 +31,7 @@
           {{ scope.row.status === 1 ? '可用' : '不可用' }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="280" align="center">
+      <el-table-column label="操作" width="300" align="center">
         <template slot-scope="scope">
           <el-button type="danger" size="mini"
                      icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除
@@ -127,7 +127,7 @@ export default {
 
     //批量删除
     removeRows() {
-      this.$confirm('此操作将永久删除医院是设置信息, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除医院设置信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

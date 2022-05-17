@@ -169,6 +169,30 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/comment',
+    component: Layout,
+    redirect: '/comment/list',
+    name: 'BasesInfo',
+    meta: {title: '评论管理', icon: 'example'},
+    alwaysShow: true,
+    children: [
+      {
+        path: 'list',
+        name: '订单列表',
+        component: () => import('@/views/comment/list'),
+        meta: {title: '评论列表'}
+      },
+
+      {
+        path: 'show/:id',
+        name: '查看',
+        component: () => import('@/views/comment/show'),
+        meta: {title: '查看', noCache: true},
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/statistics',
     component: Layout,
     redirect: '/statistics/order/index',

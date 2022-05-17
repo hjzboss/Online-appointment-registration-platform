@@ -105,18 +105,12 @@ export default {
       orderInfoApi.getOrders(this.orderId).then(response => {
         console.log(response.data);
         this.orderInfo = response.data
-      })
-      commentApi.getHospitalComment(this.orderInfo.outTradeNo).then(response => {
-        if (response.data !== null) {
-          this.hospitalComment = response.data
-        } else {
-          this.hospitalComment.outTradeNo = this.orderInfo.outTradeNo
-          this.hospitalComment.hosname = this.orderInfo.hosname
-          this.hospitalComment.hoscode = this.orderInfo.hoscode
-          this.hospitalComment.title = this.orderInfo.title
-          this.hospitalComment.depname = this.orderInfo.depname
-          this.hospitalComment.reserveDate = this.orderInfo.reserveDate
-        }
+        commentApi.getHospitalComment(this.orderInfo.outTradeNo).then(res => {
+          if (res.data !== null) {
+            console.log(res.data)
+            this.hospitalComment = res.data
+          }
+        })
       })
     },
     // 提交评论
@@ -129,6 +123,13 @@ export default {
         this.$message.warning('请打分');
         return
       }
+      this.hospitalComment.outTradeNo = this.orderInfo.outTradeNo
+      this.hospitalComment.hosname = this.orderInfo.hosname
+      this.hospitalComment.hoscode = this.orderInfo.hoscode
+      this.hospitalComment.title = this.orderInfo.title
+      this.hospitalComment.depname = this.orderInfo.depname
+      this.hospitalComment.reserveDate = this.orderInfo.reserveDate
+      console.log(this.hospitalComment)
       commentApi.postHospitalComment(this.hospitalComment).then(response => {
         this.$alert('提交成功，等待管理员审核后', '成功', {
           confirmButtonText: '确定',
