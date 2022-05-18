@@ -6,16 +6,16 @@
         <span class="phone">电话挂号010-56253825</span>
       </div>
       <div class="right">
-                <span class="v-link clickable">
-                    联系我们
+                <span class="v-link clickable" @click="$message.warning('作者：黄俊哲')">
+                    项目作者
                 </span>
-        <span class="v-link clickable">
+        <span class="v-link clickable" @click="$message.info('没有合作伙伴')">
                     合作伙伴
                 </span>
-        <span class="v-link clickable">
+        <span class="v-link clickable" @click="$message.info('没有合作伙伴')">
                     用户协议
                 </span>
-        <span class="v-link clickable">
+        <span class="v-link clickable" @click="$message.info('没有合作伙伴')">
                     隐私协议
                 </span>
       </div>

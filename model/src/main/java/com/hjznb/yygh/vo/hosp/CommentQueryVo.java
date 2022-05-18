@@ -16,7 +16,7 @@ import java.util.Date;
 @ApiModel(description = "HospitalComment")
 public class CommentQueryVo {
     @ApiModelProperty(value = "订单号")
-    private String outTradeNo;
+    private Long orderId;
 
     @ApiModelProperty(value = "就诊日期")
     @JsonFormat(pattern = "yyyy-MM-dd")

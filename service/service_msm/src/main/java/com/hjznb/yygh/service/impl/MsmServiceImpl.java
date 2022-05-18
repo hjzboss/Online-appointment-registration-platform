@@ -95,8 +95,7 @@ public class MsmServiceImpl implements MsmService {
                     String hosname = (String) msmVo.getParam().get("hosname");
                     String date = (String) msmVo.getParam().get("reserveDate");
                     String title = (String) msmVo.getParam().get("title");
-                    String number = (String) msmVo.getParam().get("number");
-                    message = "【" + hosname + "】提醒您：" + name + "您好，您的订单" + date + " " + title + "已预约成功，请于" + fetchTime + "在" + fetchAddress + "凭借身份证取号";
+                    message = "【" + hosname + "】提醒您：" + name + "您好，您已成功预约" + title + "，就诊时间为：" + date + "，取号时间为：" + fetchTime + "，取号地点：" + fetchAddress + "凭借身份证取号";
                     break;
                 }
                 case 1: {

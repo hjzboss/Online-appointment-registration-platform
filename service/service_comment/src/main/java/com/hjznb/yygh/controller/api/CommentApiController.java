@@ -37,9 +37,9 @@ public class CommentApiController {
     }
 
     @ApiOperation(value = "根据订单号获取评论")
-    @GetMapping("/getComment/{outTradeNo}")
-    public Result getHospitalComment(@PathVariable String outTradeNo) {
-        return Result.ok(hospitalCommentService.getHospitalCommentByOrderId(outTradeNo));
+    @GetMapping("/getComment/{orderId}")
+    public Result getHospitalComment(@PathVariable Long orderId) {
+        return Result.ok(hospitalCommentService.getHospitalCommentByOrderId(orderId));
     }
 
     @ApiOperation(value = "获取医院评论并计算平均分")

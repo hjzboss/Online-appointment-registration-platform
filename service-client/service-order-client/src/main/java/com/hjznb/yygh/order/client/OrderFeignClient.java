@@ -27,6 +27,6 @@ public interface OrderFeignClient {
     Map<String, Object> getCountMap(@RequestBody OrderCountQueryVo orderCountQueryVo);
 
     //提交评论
-    @PutMapping("/api/order/orderInfo/inner/commentStatus/{outTradeNo}/{status}")
-    Result updateCommentOrder(@PathVariable Integer status, @PathVariable String outTradeNo);
+    @PutMapping("/api/order/orderInfo/inner/commentStatus/{orderId}/{status}")
+    Result updateCommentOrder(@PathVariable Integer status, @PathVariable Long orderId);
 }

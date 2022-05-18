@@ -18,8 +18,8 @@ public class HospitalCommentVo {
     @ApiModelProperty(value = "评分")
     private Integer star;
 
-    @ApiModelProperty(value = "订单号")
-    private String outTradeNo;
+    @ApiModelProperty(value = "订单id")
+    private Long orderId;
 
     @ApiModelProperty(value = "就诊日期")
     @JsonFormat(pattern = "yyyy-MM-dd")

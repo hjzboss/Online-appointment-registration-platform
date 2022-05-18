@@ -22,7 +22,7 @@ public interface HospitalCommentService extends IService<HospitalComment> {
     void saveComment(HospitalCommentVo hospitalCommentVo);
 
     //根据订单号获取评论
-    HospitalCommentVo getHospitalCommentByOrderId(String outTradeNo);
+    HospitalCommentVo getHospitalCommentByOrderId(Long orderId);
 
     //条件查询分页列表
     IPage<HospitalComment> selectPage(Page<HospitalComment> pageParam, CommentQueryVo commentQueryVo);

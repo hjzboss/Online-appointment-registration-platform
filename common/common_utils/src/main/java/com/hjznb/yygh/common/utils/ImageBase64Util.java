@@ -16,7 +16,7 @@ import java.io.InputStream;
 public class ImageBase64Util {
 
     public static void main(String[] args) {
-        String imageFile = "D:\\yygh_work\\xjyy.png";// 待处理的图片
+        String imageFile = "D:\\yygh_work\\xjdi.png";// 待处理的图片
         System.out.println(getImageString(imageFile));
     }
 

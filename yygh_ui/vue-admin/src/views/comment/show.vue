@@ -5,7 +5,7 @@
       <tbody>
       <tr>
         <th width="15%">订单交易号</th>
-        <td width="35%"><b style="font-size: 14px">{{ commentData.outTradeNo }}</b></td>
+        <td width="35%">{{ commentData.orderId }}</td>
         <th width="15%">医院名称</th>
         <td width="35%">{{ commentData.hosname }}</td>
       </tr>

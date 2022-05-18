@@ -17,5 +17,12 @@ export default {
       url: `${api_name}/getComment/${orderId}`,
       method: 'get'
     })
+  },
+  // 获取医院评论和平均分
+  getAllCommentAndStar(hoscode, limit) {
+    return request({
+      url: `${api_name}/getAllComment/${hoscode}/${limit}`,
+      method: 'get'
+    })
   }
 }

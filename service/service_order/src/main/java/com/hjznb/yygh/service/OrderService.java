@@ -37,6 +37,6 @@ public interface OrderService extends IService<OrderInfo> {
     Map<String, Object> getCountMap(OrderCountQueryVo orderCountQueryVo);
 
     //更新评论状态
-    void updateCommentStatus(String outTradeNo, Integer status);
+    void updateCommentStatus(Long orderId, Integer status);
 }
 

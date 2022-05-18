@@ -105,30 +105,32 @@ export default {
       orderInfoApi.getOrders(this.orderId).then(response => {
         console.log(response.data);
         this.orderInfo = response.data
-        commentApi.getHospitalComment(this.orderInfo.outTradeNo).then(res => {
-          if (res.data !== null) {
-            console.log(res.data)
-            this.hospitalComment = res.data
-          }
-        })
+      })
+      commentApi.getHospitalComment(this.orderId).then(res => {
+        if (res.data !== null) {
+          console.log(res.data)
+          this.hospitalComment = res.data
+        }
       })
     },
     // 提交评论
     commitComment() {
-      if (this.hospitalComment.comment === '' || this.hospitalComment.comment === null) {
-        this.$message.warning('请输入评论');
-        return
-      }
-      if (this.hospitalComment.star === '' || this.hospitalComment.star === null) {
-        this.$message.warning('请打分');
-        return
-      }
-      this.hospitalComment.outTradeNo = this.orderInfo.outTradeNo
+      this.hospitalComment.orderId = this.orderId
       this.hospitalComment.hosname = this.orderInfo.hosname
       this.hospitalComment.hoscode = this.orderInfo.hoscode
       this.hospitalComment.title = this.orderInfo.title
       this.hospitalComment.depname = this.orderInfo.depname
       this.hospitalComment.reserveDate = this.orderInfo.reserveDate
+      if (this.hospitalComment.comment === '' || this.hospitalComment.comment === null || this.hospitalComment.comment === undefined) {
+        this.$message.warning('请输入评论');
+        return
+      }
+      console.log(this.hospitalComment.comment)
+      if (this.hospitalComment.star === 0 || this.hospitalComment.star === null) {
+        this.$message.warning('最低为1分，请先打分');
+        return
+      }
+      console.log(this.hospitalComment.star)
       console.log(this.hospitalComment)
       commentApi.postHospitalComment(this.hospitalComment).then(response => {
         this.$alert('提交成功，等待管理员审核后', '成功', {

@@ -60,24 +60,45 @@
             border
             style="width: 100%">
             <el-table-column
-              prop="date"
+              prop="createTime"
+              label="评论时间"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="depname"
+              label="科室"
+              width="260">
+            </el-table-column>
+            <el-table-column
+              prop="title"
+              label="医生职称"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="reserveDate"
               label="就诊日期"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
-              prop="name"
-              label="患者"
+              label="评分"
               width="180">
+              <template slot-scope="scope">
+                <el-rate
+                  v-model="scope.row.star"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}">
+                </el-rate>
+              </template>
             </el-table-column>
             <el-table-column
-              label="评价">
-              <el-rate
-                v-model="value"
-                disabled
-                show-score
-                text-color="#ff9900"
-                score-template="{value}">
-              </el-rate>
+              prop="depname"
+              label="操作"
+              width="80">
+              <template slot-scope="scope">
+                <el-button type="text" @click="showComment(scope.$index)">查看评论</el-button>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -93,6 +114,7 @@
 import '~/assets/css/hospital_personal.css'
 import '~/assets/css/hospital.css'
 import hospitalApi from "@/api/hosp/hosp";
+import commentApi from "@/api/comment/comment"
 
 export default {
   data() {
@@ -101,7 +123,7 @@ export default {
       hospital: {
         param: {},
       },
-      value: 3.7,
+      value: null,
       tableData: []
     };
   },
@@ -116,8 +138,19 @@ export default {
     init() {
       hospitalApi.show(this.hoscode).then((response) => {
         this.hospital = response.data.hospital;
-      });
+      })
+      commentApi.getAllCommentAndStar(this.hoscode, 20).then(response => {
+        this.tableData = response.data.list
+        this.value = response.data.average
+      })
     },
+    //显示评论
+    showComment(index) {
+      let comment = this.tableData[index].comment
+      this.$alert(comment, '用户评论', {
+        confirmButtonText: '返回'
+      });
+    }
   },
 };
 

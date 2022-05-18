@@ -26,7 +26,7 @@
       </div>
       <!-- 右侧 -->
       <div class="right-wrapper">
-        <span class="v-link clickable">帮助中心</span>
+        <span class="v-link clickable" onclick="window.location='/mannual'">帮助中心</span>
         <span v-if="name === ''" class="v-link clickable" @click="showLogin()" id="loginDialog">登录/注册</span>
 
         <el-dropdown v-if="name !== ''" @command="loginMenu">
@@ -94,20 +94,15 @@
 
         <div class="info-wrapper">
           <div class="code-wrapper">
-            <div><img src="~assets/images/img.png" class="code-img">
-              <div class="code-text"><span class="iconfont icon"></span>微信扫一扫关注
-              </div>
-              <div class="code-text"> “快速预约挂号”</div>
-            </div>
             <div class="wechat-code-wrapper"><img
-              src="//img.114yygh.com/static/web/code_app.png"
+              src="~assets/images/logo.png"
               class="code-img">
-              <div class="code-text"> 扫一扫下载</div>
-              <div class="code-text"> “预约挂号”APP</div>
+              <div class="code-text"> 陕医通</div>
+              <div class="code-text"> 预约挂号统一平台</div>
             </div>
           </div>
           <div class="slogan">
-            <div>陕西省官方指定平台</div>
+            <div>西安市官方指定平台</div>
             <div>快速挂号 安全放心</div>
           </div>
         </div>

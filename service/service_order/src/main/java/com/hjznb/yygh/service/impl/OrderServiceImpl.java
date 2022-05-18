@@ -341,9 +341,9 @@ public class OrderServiceImpl extends
 
     //更新评论状态
     @Override
-    public void updateCommentStatus(String outTradeNo, Integer status) {
+    public void updateCommentStatus(Long orderId, Integer status) {
         QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("out_trade_no", outTradeNo);
+        wrapper.eq("id", orderId);
         OrderInfo orderInfo = baseMapper.selectOne(wrapper);
         orderInfo.setCommentStatus(status);
         this.updateById(orderInfo);

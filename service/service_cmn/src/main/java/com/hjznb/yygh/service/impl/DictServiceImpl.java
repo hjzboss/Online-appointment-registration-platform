@@ -56,7 +56,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     //导出数据字典接口
     @Override
-    @CacheEvict(value = "value", allEntries = true)
     public void exportDictData(HttpServletResponse response) {
         //设置下载信息
         response.setContentType("application/vnd.ms-excel");
@@ -86,6 +85,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     //导入数据字典
     @Override
+    @CacheEvict(value = "dict", allEntries = true)
     public void importDictData(MultipartFile file) {
         try {
             EasyExcel.read(file.getInputStream(), DictEeVo.class, new DictListener(baseMapper))

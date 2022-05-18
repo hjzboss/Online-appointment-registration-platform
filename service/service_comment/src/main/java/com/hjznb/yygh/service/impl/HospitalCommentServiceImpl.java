@@ -15,6 +15,8 @@ import com.hjznb.yygh.service.HospitalCommentService;
 import com.hjznb.yygh.vo.hosp.CommentQueryVo;
 import com.hjznb.yygh.vo.hosp.HospitalCommentVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -41,27 +43,29 @@ public class HospitalCommentServiceImpl extends ServiceImpl<HospitalCommentMappe
      * @param hospitalCommentVo 用户端上传的评论
      */
     @Override
+    @CacheEvict(value = "comment", allEntries = true)
     public void saveComment(HospitalCommentVo hospitalCommentVo) {
-        String outTradeNo = hospitalCommentVo.getOutTradeNo();
+        Long orderId = hospitalCommentVo.getOrderId();
         HospitalComment hospitalComment = new HospitalComment();
         BeanUtils.copyProperties(hospitalCommentVo, hospitalComment);
         hospitalComment.setCreateTime(new Date());
         hospitalComment.setStatus(CommentStatusEnum.COMMENT_WAIT.getStatus());
-        orderFeignClient.updateCommentOrder(OrderCommentStatusEnum.COMMENT_AUTH.getStatus(), outTradeNo);
+        orderFeignClient.updateCommentOrder(OrderCommentStatusEnum.COMMENT_AUTH.getStatus(), orderId);
         this.save(hospitalComment);
     }
 
     /**
      * 根据订单号获取评论
      *
-     * @param outTradeNo 订单号
+     * @param orderId 订单号
      * @return 查询到的评论对象
      */
     @Override
-    public HospitalCommentVo getHospitalCommentByOrderId(String outTradeNo) {
+    public HospitalCommentVo getHospitalCommentByOrderId(Long orderId) {
         //查询评论
         QueryWrapper<HospitalComment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("out_trade_no", outTradeNo);
+        queryWrapper.eq("order_id", orderId);
+        queryWrapper.ne("status", CommentStatusEnum.COMMENT_FAIL.getStatus());
         HospitalComment hospitalComment = baseMapper.selectOne(queryWrapper);
         HospitalCommentVo result = null;
         if (hospitalComment != null) {
@@ -85,7 +89,7 @@ public class HospitalCommentServiceImpl extends ServiceImpl<HospitalCommentMappe
         String hosname = commentQueryVo.getHosname(); //医院名称
         Date reserveDate = commentQueryVo.getReserveDate();//安排时间
         String depname = commentQueryVo.getDepname(); //科室名称
-        String outTradeNo = commentQueryVo.getOutTradeNo(); //订单编号
+        Long orderId = commentQueryVo.getOrderId();//订单编号
         Integer status = commentQueryVo.getStatus(); //评论状态
         String title = commentQueryVo.getTitle(); //医生职称
         String createTimeBegin = commentQueryVo.getCreateTimeBegin(); //创建时间开始
@@ -101,8 +105,8 @@ public class HospitalCommentServiceImpl extends ServiceImpl<HospitalCommentMappe
         if (!StringUtils.isEmpty(depname)) {
             wrapper.like("depname", depname);
         }
-        if (!StringUtils.isEmpty(outTradeNo)) {
-            wrapper.like("out_trade_no", outTradeNo);
+        if (!StringUtils.isEmpty(orderId)) {
+            wrapper.eq("orderId", orderId);
         }
         if (!StringUtils.isEmpty(status)) {
             wrapper.eq("status", status);
@@ -150,16 +154,17 @@ public class HospitalCommentServiceImpl extends ServiceImpl<HospitalCommentMappe
      * @param status 要修改的状态
      */
     @Override
+    @CacheEvict(value = "comment", allEntries = true)
     public void updateStatusById(Integer id, Integer status) {
         //根据id获取评论并修改评论状态
         HospitalComment hospitalComment = baseMapper.selectById(id);
         hospitalComment.setStatus(status);
-        String outTradeNo = hospitalComment.getOutTradeNo();
+        Long orderId = hospitalComment.getOrderId();
         //修改订单表的状态
         if (status.equals(CommentStatusEnum.COMMENT_PASS.getStatus())) {
-            orderFeignClient.updateCommentOrder(OrderCommentStatusEnum.COMMENT_FINISH.getStatus(), outTradeNo);
+            orderFeignClient.updateCommentOrder(OrderCommentStatusEnum.COMMENT_FINISH.getStatus(), orderId);
         } else if (status.equals(CommentStatusEnum.COMMENT_FAIL.getStatus())) {
-            orderFeignClient.updateCommentOrder(OrderCommentStatusEnum.NO_COMMENT.getStatus(), outTradeNo);
+            orderFeignClient.updateCommentOrder(OrderCommentStatusEnum.NO_COMMENT.getStatus(), orderId);
         } else {
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
@@ -174,9 +179,11 @@ public class HospitalCommentServiceImpl extends ServiceImpl<HospitalCommentMappe
      * @return 评论列表和平均分的封装对象
      */
     @Override
+    @Cacheable(value = "comment", keyGenerator = "keyGenerator")
     public Map<String, Object> selectPageAndStar(String hoscode, Long limit) {
         QueryWrapper<HospitalComment> wrapper = new QueryWrapper<>();
         wrapper.eq("hoscode", hoscode);
+        wrapper.eq("status", CommentStatusEnum.COMMENT_PASS.getStatus());
         wrapper.orderByDesc("id"); //根据id逆序排列
         Map<String, Object> result = new HashMap<>(); //返回的结果
         List<HospitalComment> records; //返回的列表数据

@@ -134,6 +134,7 @@ public class ApiServiceImpl implements ApiService {
         return null;
     }
 
+    //保存医院信息
     @Override
     public boolean saveHospital(String data) {
         JSONObject jsonObject = JSONObject.parseObject(data);

@@ -21,9 +21,9 @@ import java.util.Date;
 public class HospitalComment extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "订单号")
-    @TableField("out_trade_no")
-    private String outTradeNo;
+    @ApiModelProperty(value = "订单id")
+    @TableField("order_id")
+    private Long orderId;
 
     @ApiModelProperty(value = "医院名称")
     @TableField("hosname")

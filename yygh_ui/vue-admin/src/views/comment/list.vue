@@ -5,9 +5,6 @@
         <el-input v-model="searchObj.hosname" placeholder="医院名称"/>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="searchObj.outTradeNo" placeholder="订单号"/>
-      </el-form-item>
-      <el-form-item>
         <el-input v-model="searchObj.depname" placeholder="科室名称"/>
       </el-form-item>
       <el-form-item>
@@ -65,18 +62,19 @@
           {{ (page - 1) * limit + scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column prop="outTradeNo" label="订单交易号" width="160"/>
-      <el-table-column prop="hosname" label="医院名称" width="160"/>
-      <el-table-column prop="depname" label="科室名称" width="160"/>
-      <el-table-column prop="title" label="医生职称"/>
-      <el-table-column label="安排时间" width="130">
+      <el-table-column prop="orderId" label="订单号" width="80" align="center"/>
+      <el-table-column prop="hosname" label="医院名称" width="160" align="center"/>
+      <el-table-column prop="reserveDate" label="就诊日期" width="100" align="center"/>
+      <el-table-column prop="depname" label="科室名称" width="160" align="center"/>
+      <el-table-column prop="title" label="医生职称" width="100" align="center"/>
+      <el-table-column label="安排时间" width="130" align="center">
         <template slot-scope="scope">
           {{ scope.row.reserveDate }}
         </template>
       </el-table-column>
-      <el-table-column prop="param.commentStatus" label="评论状态"/>
-      <el-table-column prop="createTime" label="创建时间" width="156"/>
-      <el-table-column label="操作" width="380" align="center">
+      <el-table-column prop="param.commentStatus" label="评论状态" align="center"/>
+      <el-table-column prop="createTime" label="评论时间" width="156" align="center"/>
+      <el-table-column label="操作" width="360" align="center">
         <template slot-scope="scope">
           <router-link :to="'/comment/show/'+scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit">查看</el-button>

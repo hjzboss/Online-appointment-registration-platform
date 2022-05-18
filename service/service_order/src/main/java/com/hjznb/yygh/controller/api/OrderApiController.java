@@ -85,9 +85,9 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "修改订单评论状态")
-    @PutMapping("inner/commentStatus/{outTradeNo}/{status}")
-    public Result updateCommentOrder(@PathVariable Integer status, @PathVariable String outTradeNo) {
-        orderService.updateCommentStatus(outTradeNo, status);
+    @PutMapping("inner/commentStatus/{orderId}/{status}")
+    public Result updateCommentOrder(@PathVariable Integer status, @PathVariable Long orderId) {
+        orderService.updateCommentStatus(orderId, status);
         return Result.ok();
     }
 }
