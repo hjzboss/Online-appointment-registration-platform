@@ -73,7 +73,7 @@ export default {
     return {     //(page, limit, searchObj)参考这里传递的参数进行定义变量
 
       current: 1,  //当前页
-      limit: 3,  //每页显示记录数
+      limit: 5,  //每页显示记录数
       searchObj: {hosname: '', hoscode: ''},  //条件封装对象
       list: [], //这个是用来接受返回的列表的
       total: 0,

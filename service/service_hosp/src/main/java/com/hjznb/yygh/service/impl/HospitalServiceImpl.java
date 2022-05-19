@@ -14,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * @author hjz
@@ -66,10 +67,13 @@ public class HospitalServiceImpl implements HospitalService {
 
     //条件查询带分页
     @Override
-    public Page<Hospital> selectHospPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo) {
+    public Page<Hospital> selectHospPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo, boolean isAdmin) {
         Pageable of = PageRequest.of(page - 1, limit);
         ExampleMatcher matcher = ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnoreCase(true);
         Hospital hospital = new Hospital();
+        if (!isAdmin) {
+            hospitalQueryVo.setStatus(1); //只返回上线的医院
+        }
         BeanUtils.copyProperties(hospitalQueryVo, hospital);
         Example<Hospital> example = Example.of(hospital, matcher);
         Page<Hospital> pages = hospitalRepository.findAll(example, of);
@@ -81,7 +85,7 @@ public class HospitalServiceImpl implements HospitalService {
     @Override
     public void updateStatus(String id, Integer status) {
         Optional<Hospital> byId = hospitalRepository.findById(id);
-        if(byId.isPresent()) {
+        if (byId.isPresent()) {
             //更新status
             Hospital hospital = byId.get();
             hospitalRepository.delete(hospital);
@@ -97,11 +101,11 @@ public class HospitalServiceImpl implements HospitalService {
     public Map<String, Object> getHospById(String id) {
         Map<String, Object> result = new HashMap<>();
         Optional<Hospital> byId = hospitalRepository.findById(id);
-        if(byId.isPresent()) {
+        if (byId.isPresent()) {
             Hospital hospital = byId.get();
             // 添加额外信息
             this.setHospitalHosType(hospital);
-            result.put("hospital",hospital);
+            result.put("hospital", hospital);
             result.put("bookingRule", hospital.getBookingRule());
             hospital.setBookingRule(null);
             return result;
@@ -113,7 +117,7 @@ public class HospitalServiceImpl implements HospitalService {
     @Override
     public String getHospName(String hoscode) {
         Hospital hospital = hospitalRepository.getHospitalByHoscode(hoscode);
-        if(hospital != null) {
+        if (hospital != null) {
             return hospital.getHosname();
         }
         return null;
@@ -122,7 +126,12 @@ public class HospitalServiceImpl implements HospitalService {
     //根据医院名称查询
     @Override
     public List<Hospital> findByHosname(String hosname) {
-        return hospitalRepository.findHospitalByHosnameLike(hosname);
+        ExampleMatcher matcher = ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnoreCase(true);
+        Hospital hospital = new Hospital();
+        hospital.setHosname(hosname);
+        hospital.setStatus(1);
+        Example<Hospital> example = Example.of(hospital, matcher);
+        return hospitalRepository.findAll(example);
     }
 
     //返回医院详情

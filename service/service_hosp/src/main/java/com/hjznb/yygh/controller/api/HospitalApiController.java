@@ -47,7 +47,7 @@ public class HospitalApiController {
     @ApiOperation(value = "查询医院列表")
     @GetMapping("findHospList/{page}/{limit}")
     public Result findHospList(@PathVariable Integer limit, @PathVariable Integer page, HospitalQueryVo hospitalQueryVo) {
-        Page<Hospital> hospitals = hospitalService.selectHospPage(page, limit, hospitalQueryVo);
+        Page<Hospital> hospitals = hospitalService.selectHospPage(page, limit, hospitalQueryVo, false);
         return Result.ok(hospitals);
     }
 

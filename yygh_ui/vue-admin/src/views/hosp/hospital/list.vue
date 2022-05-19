@@ -107,7 +107,7 @@ export default {
       list: null, // banner列表
       total: 0, // 数据库中的总记录数
       page: 1, // 默认页码
-      limit: 10, // 每页记录数
+      limit: 5, // 每页记录数
       searchObj: {}, // 查询表单对象
       provinceList: [],
       cityList: [],

@@ -122,9 +122,7 @@ public class HospitalCommentServiceImpl extends ServiceImpl<HospitalCommentMappe
         }
         //调用mapper的方法
         IPage<HospitalComment> hospitalCommentPage = baseMapper.selectPage(pageParam, wrapper);
-        List<HospitalComment> records = hospitalCommentPage.getRecords();
-        records.forEach(this::packageComment);
-        hospitalCommentPage.setRecords(records);
+        hospitalCommentPage.getRecords().forEach(this::packageComment);
         return hospitalCommentPage;
     }
 

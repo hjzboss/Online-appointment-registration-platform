@@ -34,7 +34,7 @@ public class HospitalController {
     public Result listHospital(@PathVariable Integer page,
                                @PathVariable Integer limit,
                                HospitalQueryVo hospitalQueryVo) {
-        Page<Hospital> pageModel = hospitalService.selectHospPage(page, limit, hospitalQueryVo);
+        Page<Hospital> pageModel = hospitalService.selectHospPage(page, limit, hospitalQueryVo, true);
         return Result.ok(pageModel);
     }
 

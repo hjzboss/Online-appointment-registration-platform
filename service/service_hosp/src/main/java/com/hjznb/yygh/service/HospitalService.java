@@ -20,7 +20,7 @@ public interface HospitalService {
     Hospital getByHoscode(String hoscode);
 
     //医院列表（条件查询带分页）
-    Page<Hospital> selectHospPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo);
+    Page<Hospital> selectHospPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo, boolean isAdmin);
 
     //更新医院上线状态
     void updateStatus(String id, Integer status);
