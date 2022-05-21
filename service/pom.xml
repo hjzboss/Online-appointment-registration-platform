@@ -21,6 +21,7 @@
         <module>service_task</module>
         <module>service_statistics</module>
         <module>service_comment</module>
+        <module>service_feedback</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

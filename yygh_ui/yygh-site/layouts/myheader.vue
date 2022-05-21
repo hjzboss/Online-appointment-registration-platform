@@ -26,6 +26,7 @@
       </div>
       <!-- 右侧 -->
       <div class="right-wrapper">
+        <span class="v-link clickable" @click="gotoFeedback()">意见反馈</span>
         <span class="v-link clickable" onclick="window.location='/mannual'">帮助中心</span>
         <span v-if="name === ''" class="v-link clickable" @click="showLogin()" id="loginDialog">登录/注册</span>
 
@@ -356,6 +357,18 @@ export default {
     phoneLogin() {
       this.dialogAtrr.showLoginType = 'phone'
       this.showLogin()
+    },
+
+    gotoFeedback() {
+      // 登录判断
+      let token = cookie.get('token')
+      if (!token) {
+        // 如果没登陆，跳出登录框
+        this.$message.warning('请先登录！')
+        loginEvent.$emit('loginDialogEvent')
+        return
+      }
+      window.location='/feedback'
     }
   }
 }

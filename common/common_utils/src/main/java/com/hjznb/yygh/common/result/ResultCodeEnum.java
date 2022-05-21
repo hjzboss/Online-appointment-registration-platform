@@ -41,6 +41,8 @@ public enum ResultCodeEnum {
     SIGN_ERROR(300, "签名错误"),
     HOSPITAL_OPEN(310, "医院未开通，暂时不能访问"),
     HOSPITAL_LOCK(320, "医院被锁定，暂时不能访问"),
+    PHONE_EXIST(330, "手机号已存在"),
+    HAVE_FEEDBACK_TODAY(340, "每天仅可反馈一次")
     ;
     //上面的每个枚举类实例都必须带上code和message的信息，且必须写在最上面
 

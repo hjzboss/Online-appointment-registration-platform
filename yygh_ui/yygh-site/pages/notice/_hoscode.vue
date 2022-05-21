@@ -1,6 +1,6 @@
 <template>
   <!-- header -->
-  <div class="nav-container page-component">
+  <div class="page-component">
     <br>
     <br>
     <!-- 右侧内容 #start -->
@@ -11,9 +11,10 @@
           <br>
           <p>{{ notice }}</p>
           <br v-for="(item, index) in new Array(2)" :key="index">
-          <div>陕医通预约挂号平台</div>
-          <br>
-          <div>{{ notice_data }}</div>
+          <div align="right">          <div>陕医通预约挂号平台</div>
+            <br>
+            <div>{{ notice_data }}</div></div>
+
           <br v-for="(item, index) in new Array(17)" :key="index">
         </div>
       </div>

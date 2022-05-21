@@ -207,6 +207,22 @@ export const constantRouterMap = [
         meta: {title: '预约统计'}
       }
     ]
+  },
+  {
+    path: '/feedback',
+    component: Layout,
+    redirect: '/feedback/list',
+    name: 'BasesInfo',
+    meta: {title: '反馈', icon: 'example'},
+    alwaysShow: true,
+    children: [
+      {
+        path: 'list',
+        name: '反馈列表',
+        component: () => import('@/views/feedback/list'),
+        meta: {title: '反馈列表'}
+      }
+    ]
   }
 ]
 

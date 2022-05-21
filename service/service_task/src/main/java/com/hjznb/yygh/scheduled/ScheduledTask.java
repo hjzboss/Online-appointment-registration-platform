@@ -26,7 +26,7 @@ public class ScheduledTask {
      */
     //cron表达式，设置执行间隔
     //0/30 * * * * ?  每30秒执行一次,用于测试
-    @Scheduled(cron = "0 0 8 * * ?")
+    @Scheduled(cron = "0 0 8 * * ? ")
     public void taskPatient() {
         rabbitService.sendMessage(MqConst.EXCHANGE_DIRECT_TASK, MqConst.ROUTING_TASK_8, " ");
     }

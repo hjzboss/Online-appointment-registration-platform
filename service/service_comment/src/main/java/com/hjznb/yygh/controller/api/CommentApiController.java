@@ -1,14 +1,10 @@
 package com.hjznb.yygh.controller.api;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hjznb.yygh.common.result.Result;
-import com.hjznb.yygh.model.hosp.HospitalComment;
 import com.hjznb.yygh.service.HospitalCommentService;
-import com.hjznb.yygh.vo.hosp.HospitalCommentVo;
+import com.hjznb.yygh.vo.comment.HospitalCommentVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;

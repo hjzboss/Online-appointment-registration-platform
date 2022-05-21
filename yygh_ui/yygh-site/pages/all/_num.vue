@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-container page-component">
+  <div class="page-component">
     <div class="context-container">
       <div class="content">
         <br>

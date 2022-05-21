@@ -236,6 +236,16 @@ public class UserInfoServiceImpl extends
         if (!code.equals(redisCode)) {
             throw new YyghException(ResultCodeEnum.CODE_ERROR);
         }
+
+        //判断手机号是否已使用
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
+        wrapper.like("phone", phone);
+        UserInfo isExist = baseMapper.selectOne(wrapper);
+        System.out.println(isExist);
+        if (isExist != null && !isExist.getId().equals(id)) {
+            throw new YyghException(ResultCodeEnum.PHONE_EXIST);
+        }
+
         log.info("----------开始修改----------");
         //按用户id查找信息后修改手机号，然后更新
         UserInfo userInfo = baseMapper.selectById(id);

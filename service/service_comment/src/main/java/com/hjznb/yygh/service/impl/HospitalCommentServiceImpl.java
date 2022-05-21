@@ -12,8 +12,8 @@ import com.hjznb.yygh.mapper.HospitalCommentMapper;
 import com.hjznb.yygh.model.hosp.HospitalComment;
 import com.hjznb.yygh.order.client.OrderFeignClient;
 import com.hjznb.yygh.service.HospitalCommentService;
-import com.hjznb.yygh.vo.hosp.CommentQueryVo;
-import com.hjznb.yygh.vo.hosp.HospitalCommentVo;
+import com.hjznb.yygh.vo.comment.CommentQueryVo;
+import com.hjznb.yygh.vo.comment.HospitalCommentVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author hjz

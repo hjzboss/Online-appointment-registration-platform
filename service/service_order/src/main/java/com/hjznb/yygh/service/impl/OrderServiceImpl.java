@@ -183,10 +183,14 @@ public class OrderServiceImpl extends
         String orderStatus = orderQueryVo.getOrderStatus(); //订单状态
         String reserveDate = orderQueryVo.getReserveDate();//安排时间
         String outTradeNo = orderQueryVo.getOutTradeNo();//订单号
+        Long userId = orderQueryVo.getUserId();//用户id
         String createTimeBegin = orderQueryVo.getCreateTimeBegin();
         String createTimeEnd = orderQueryVo.getCreateTimeEnd();
         //对条件值进行非空判断
         QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(userId)) {
+            wrapper.eq("user_id", userId);
+        }
         if (!StringUtils.isEmpty(hosname)) {
             wrapper.like("hosname", hosname);
         }

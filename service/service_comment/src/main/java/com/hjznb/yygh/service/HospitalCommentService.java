@@ -3,11 +3,9 @@ package com.hjznb.yygh.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hjznb.yygh.model.hosp.Hospital;
 import com.hjznb.yygh.model.hosp.HospitalComment;
-import com.hjznb.yygh.model.hosp.HospitalSet;
-import com.hjznb.yygh.vo.hosp.CommentQueryVo;
-import com.hjznb.yygh.vo.hosp.HospitalCommentVo;
+import com.hjznb.yygh.vo.comment.CommentQueryVo;
+import com.hjznb.yygh.vo.comment.HospitalCommentVo;
 
 import java.util.Map;
 

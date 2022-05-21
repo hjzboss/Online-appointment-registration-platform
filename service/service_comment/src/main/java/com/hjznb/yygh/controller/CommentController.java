@@ -3,18 +3,12 @@ package com.hjznb.yygh.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hjznb.yygh.common.result.Result;
-import com.hjznb.yygh.model.hosp.Hospital;
 import com.hjznb.yygh.model.hosp.HospitalComment;
-import com.hjznb.yygh.model.order.OrderInfo;
 import com.hjznb.yygh.service.HospitalCommentService;
-import com.hjznb.yygh.vo.hosp.CommentQueryVo;
-import com.hjznb.yygh.vo.hosp.HospitalCommentVo;
-import com.hjznb.yygh.vo.hosp.HospitalQueryVo;
-import com.hjznb.yygh.vo.order.OrderQueryVo;
+import com.hjznb.yygh.vo.comment.CommentQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,8 +44,6 @@ public class CommentController {
     @ApiOperation(value = "根据id获取评论")
     @GetMapping("getComment/{id}")
     public Result getById(@PathVariable Integer id) {
-        System.out.println("执行方法");
-        //todo：将状态封装进数据中
         return Result.ok(hospitalCommentService.getCommentById(id));
     }
 

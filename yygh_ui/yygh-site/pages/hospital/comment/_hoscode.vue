@@ -141,7 +141,7 @@ export default {
       })
       commentApi.getAllCommentAndStar(this.hoscode, 20).then(response => {
         this.tableData = response.data.list
-        this.value = response.data.average
+        this.value = (response.data.average).toFixed(1) // 保留一位小数
       })
     },
     //显示评论
