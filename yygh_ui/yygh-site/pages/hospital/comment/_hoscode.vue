@@ -93,7 +93,6 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="depname"
               label="操作"
               width="80">
               <template slot-scope="scope">
