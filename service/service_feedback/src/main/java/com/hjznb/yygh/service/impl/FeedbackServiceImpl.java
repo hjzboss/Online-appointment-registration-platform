@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjznb.yygh.common.exception.YyghException;
 import com.hjznb.yygh.common.result.ResultCodeEnum;
 import com.hjznb.yygh.mapper.FeedbackMapper;
-import com.hjznb.yygh.model.hosp.HospitalComment;
 import com.hjznb.yygh.model.user.Feedback;
 import com.hjznb.yygh.service.FeedbackService;
 import com.hjznb.yygh.vo.feedback.FeedbackQueryVo;
@@ -65,6 +64,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
         Long userId = feedbackQueryVo.getUserId();
         String createTimeBegin = feedbackQueryVo.getCreateTimeBegin();
         String createTimeEnd = feedbackQueryVo.getCreateTimeEnd();
+        Long status = feedbackQueryVo.getStatus();
         QueryWrapper<Feedback> wrapper = new QueryWrapper<>();
         if (!StringUtils.isEmpty(userId)) {
             wrapper.eq("user_id", userId);
@@ -75,6 +75,25 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
         if (!StringUtils.isEmpty(createTimeEnd)) {
             wrapper.le("create_time", createTimeEnd);
         }
-        return baseMapper.selectPage(pageParam, wrapper);
+        if (!StringUtils.isEmpty(status)) {
+            wrapper.eq("status", status);
+        }
+        Page<Feedback> feedbackPage = baseMapper.selectPage(pageParam, wrapper);
+        feedbackPage.getRecords().forEach(this::packageFeedback);
+        return feedbackPage;
+    }
+
+    /**
+     * 包装反馈，设置状态信息
+     *
+     * @param feedback 待包装的反馈
+     */
+    private void packageFeedback(Feedback feedback) {
+        Long status = feedback.getStatus();
+        if (status == 0) {
+            feedback.getParam().put("status", "待解决");
+        } else {
+            feedback.getParam().put("status", "已解决");
+        }
     }
 }

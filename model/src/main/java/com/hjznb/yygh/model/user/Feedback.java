@@ -25,4 +25,12 @@ public class Feedback extends BaseEntity {
     @ApiModelProperty(value = "用户id")
     @TableField("user_id")
     private Long userId;
+
+    @ApiModelProperty(value = "回复信息")
+    @TableField("reply")
+    private String reply;
+
+    @ApiModelProperty(value = "状态")
+    @TableField("status")
+    private Long status;
 }

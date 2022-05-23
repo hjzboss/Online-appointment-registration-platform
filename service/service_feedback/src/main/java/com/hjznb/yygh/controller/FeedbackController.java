@@ -63,4 +63,22 @@ public class FeedbackController {
         feedbackService.removeByIds(idList);
         return Result.ok();
     }
+
+    @ApiOperation(value = "修改反馈状态")
+    @PutMapping("{id}/{status}")
+    public Result changeStatus(@PathVariable Long id, @PathVariable Long status) {
+        Feedback byId = feedbackService.getById(id);
+        byId.setStatus(status);
+        feedbackService.updateById(byId);
+        return Result.ok();
+    }
+
+    @ApiOperation(value = "回复反馈")
+    @PostMapping("{id}/{reply}")
+    public Result replyFeedback(@PathVariable Long id, @PathVariable String reply) {
+        Feedback byId = feedbackService.getById(id);
+        byId.setReply(reply);
+        feedbackService.updateById(byId);
+        return Result.ok();
+    }
 }

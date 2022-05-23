@@ -42,8 +42,7 @@ public class FeedbackApiController {
 
     @ApiOperation(value = "分页获取反馈")
     @GetMapping("getFeedback/{page}/{limit}")
-    public Result getFeedback(HttpServletRequest request, @PathVariable Long limit, @PathVariable Long page) {
-        FeedbackQueryVo feedbackQueryVo = new FeedbackQueryVo();
+    public Result getFeedback(HttpServletRequest request, @PathVariable Long limit, @PathVariable Long page, FeedbackQueryVo feedbackQueryVo) {
         feedbackQueryVo.setUserId(AuthContextHolder.getUserId(request));
         Page<Feedback> pageParam = new Page<>(page, limit);
         IPage<Feedback> pageModel = feedbackService.selectPage(pageParam, feedbackQueryVo);

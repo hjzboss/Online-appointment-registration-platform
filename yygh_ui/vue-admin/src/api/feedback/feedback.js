@@ -26,12 +26,28 @@ export default {
     })
   },
 
-  //批量删除
+  // 批量删除
   batchRemoveHospitalSet(idList) {
     return request({
       url: `${api_name}/batchRemove`,
       method: 'delete',
       data: idList
+    })
+  },
+
+  // 修改状态
+  changeStatus(id, status) {
+    return request({
+      url: `${api_name}/${id}/${status}`,
+      method: 'put'
+    })
+  },
+
+  // 回复反馈
+  replyFeedback(id, reply) {
+    return request({
+      url: `${api_name}/${id}/${reply}`,
+      method: 'post'
     })
   }
 }

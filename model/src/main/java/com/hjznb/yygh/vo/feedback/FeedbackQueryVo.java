@@ -18,6 +18,9 @@ public class FeedbackQueryVo {
     @ApiModelProperty(value = "用户id")
     private Long userId;
 
+    @ApiModelProperty(value = "状态")
+    private Long status;
+
     @ApiModelProperty(value = "创建时间")
     private String createTimeBegin;
     private String createTimeEnd;

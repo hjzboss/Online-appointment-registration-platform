@@ -24,12 +24,22 @@
           <el-table-column
             prop="createTime"
             label="反馈时间"
-            width="480">
+            width="280">
           </el-table-column>
           <el-table-column
             prop="feedback"
             label="反馈内容"
-            width="520">
+            width="280">
+          </el-table-column>
+          <el-table-column
+            prop="param.status"
+            label="反馈状态"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="reply"
+            label="回复信息"
+            width="280">
           </el-table-column>
         </el-table>
         <br>
