@@ -74,11 +74,11 @@ export default {
     //获取路由id
     const id = this.$route.params.id
     //调用方法，根据id查询医院详情
-    this.fetachHospDetail(id)
+    this.fetchHospDetail(id)
   },
   methods: {
     //根据id查询医院详情
-    fetachHospDetail(id) {
+    fetchHospDetail(id) {
       hospApi.getHospById(id)
         .then(response => {   //hospital和bookingRule是我们在java中自己定义的名称
           this.hospital = response.data.hospital

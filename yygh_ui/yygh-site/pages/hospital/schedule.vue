@@ -256,22 +256,22 @@ export default {
     },
 
     countDown(releaseTime, nowTime) {
-//计算倒计时时长
+      //计算倒计时时长
       let secondes = 0;
       if (releaseTime > nowTime) {
         this.time = '今天'
-//当前时间到放号时间的时长
+        //当前时间到放号时间的时长
         secondes = Math.floor((releaseTime - nowTime) / 1000);
       } else {
         this.time = '明天'
-//计算明天放号时间
+        //计算明天放号时间
         let releaseDate = new Date(releaseTime)
         releaseTime = new Date(releaseDate.setDate(releaseDate.getDate() + 1)).getTime()
-//当前时间到明天放号时间的时长
+        //当前时间到明天放号时间的时长
         secondes = Math.floor((releaseTime - nowTime) / 1000);
       }
 
-//定时任务
+      //定时任务
       this.timer = setInterval(() => {
         secondes = secondes - 1
         if (secondes <= 0) {

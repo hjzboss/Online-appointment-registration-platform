@@ -38,7 +38,7 @@ public class FeedbackController {
             @PathVariable Long page,
             @ApiParam(name = "limit", value = "每页记录数", required = true)
             @PathVariable Long limit,
-            @ApiParam(name = "hospitalCommentVo", value = "查询对象", required = false) FeedbackQueryVo feedbackQueryVo) {
+            @ApiParam(name = "FeedbackQueryVo", value = "查询对象", required = false) FeedbackQueryVo feedbackQueryVo) {
         Page<Feedback> pageParam = new Page<>(page, limit);
         IPage<Feedback> pageModel = feedbackService.selectPage(pageParam, feedbackQueryVo);
         return Result.ok(pageModel);

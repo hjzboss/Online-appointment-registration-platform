@@ -52,7 +52,7 @@ public class UserInfoApiController {
     }
 
     //获取用户id信息接口
-    @ApiOperation(value = "获取用户id信息接口")
+    @ApiOperation(value = "根据用户id获取用户信息")
     @GetMapping("auth/getUserInfo")
     public Result getUserInfo(HttpServletRequest request) {
         Long userId = AuthContextHolder.getUserId(request);
