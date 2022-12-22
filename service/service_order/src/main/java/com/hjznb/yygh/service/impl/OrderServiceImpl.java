@@ -59,10 +59,12 @@ public class OrderServiceImpl extends
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Long saveOrder(String scheduleId, Long patientId) {
+        //获取就诊人
         Patient patient = patientFeignClient.getPatientOrder(patientId);
         if (null == patient) {
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
+        //获取排班信息
         ScheduleOrderVo scheduleOrderVo = hospitalFeignClient.getScheduleOrderVo(scheduleId);
         if (null == scheduleOrderVo) {
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);

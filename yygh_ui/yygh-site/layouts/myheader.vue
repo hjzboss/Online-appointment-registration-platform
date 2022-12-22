@@ -251,6 +251,7 @@ export default {
 
     // 获取验证码
     getCodeFun() {
+      // 验证手机号格式
       if (!(/^1[34578]\d{9}$/.test(this.userInfo.phone))) {
         this.$message.error('手机号码不正确')
         return;
