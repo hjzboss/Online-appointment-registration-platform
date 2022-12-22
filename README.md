@@ -2,13 +2,16 @@
 
 ## 1.1 介绍
 系统实现了一套供用户进行网上预约挂号的客户端以及供管理员进行平台相关管理工作的后台管理系统，客户端为用户提供了用户的注册登录、预约挂号和个人信息管理等功能，后台管理员提供了订单管理、医院管理、数据管理、会员管理和统计管理等功能。
-![archit](./img/top.png)
 ## 1.2 技术架构
 ![archit](./img/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84.png)
 
 ## 1.3 前端
 前端分为用户端和后台管理员端，位于yygu_ui文件夹中，采用nuxt框架进行开发
 ### 1.3.1 用户端
+用户端主页
+
+![archit](./img/top.png)
+
 用户端的文件夹为yygh-site，下面是文件夹中的文件介绍
 * .nuxt文件夹中保存的是nuxt框架相关的文件；
 * api文件夹中封装了所有对后端接口的请求js文件，里面封装了各种对后端接口访问的功能方法；
@@ -20,6 +23,10 @@
 * utils包中保存了全局公用方法 request.js，其中初始化了axios和拦截器等相关全局工具。
 
 ### 1.3.2 管理员端
+管理员端主页
+
+![archit](./img/admin.png)
+
 管理员端的文件夹为yygh-admin
 * build包下保存了与构建项目相关的配置文件；
 * config包中保存了各种配置js文件，包括开发环境使用的dev.js文件和生产环境使用的prod.js文件，js文件中配置了访问后端的默认接口路径；
@@ -56,3 +63,8 @@
   * service_user为用户模块，处理和用户相关的业务。
 * service-client模块向service模块提供了基于feign的客户端，用于微服务模块间的互相调用，其中包括了：数据字典模块客户端service-cmn-client、医院模块客户端service-hosp-client、订单模块客户端service-order-client和用户模块客户端service-user-client。
 * service-gateway模块提供网关的微服务，所有外部对后端接口的访问都会经过网关转换为对service模块中某个微服务的调用。
+
+## 使用
+如果需要使用，请将后端中所有微服务模块中的`resource`文件夹中的配置文件`application.yml`进行修改
+
+包括mysql、linux地址、阿里云oss、短信服务（容联云）key、mongodb等等
