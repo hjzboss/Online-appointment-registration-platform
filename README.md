@@ -67,4 +67,4 @@
 ## 使用
 如果需要使用，请将后端中所有微服务模块中的`resource`文件夹中的配置文件`application.yml`进行修改
 
-包括mysql、linux地址、阿里云oss、短信服务（容联云）key、mongodb等等
+包括mysql、linux地址、阿里云oss、短信服务（容联云）配置
